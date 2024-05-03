@@ -1,6 +1,9 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.RssChannel;
+import at.kaindorf.rssbackend.pojos.RssOuter;
+import jakarta.annotation.PostConstruct;
+import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,5 +20,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class InitDatabase {
 
-    private final RssChannel
+    private final String feedUrl = "https://www.kleinezeitung.at/rss/service/newsticker";
+
+    private final RssChannelRepo rssChannelRepo;
+    private final RssItemRepo rssItemRepo;
+
+    @PostConstruct
+    public void loadData() {
+        RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
+        RssChannel channel = rss.getChannel();
+        rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
+        channel.setFeedUrl(feedUrl);
+        if (!rssChannelRepo.existsByFeedUrl(feedUrl)) rssChannelRepo.save(rss.getChannel());
+    }
 }
