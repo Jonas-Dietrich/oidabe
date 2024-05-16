@@ -13,11 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Project: RssBackend
- * Created by: eibmac20
- * Date: 16.05.24
+ * This class represents the REST controller for managing the feed list.
+ * It handles HTTP requests related to the feed list resource.
  */
-
 @RestController
 @Slf4j
 @RequestMapping("/feed-list")
@@ -26,6 +24,13 @@ import java.util.stream.Collectors;
 public class FeedListResource {
     private final FeedListService feedListService;
 
+    /**
+     * Retrieves all RSS channels from the feed list.
+     * If the 'urls' parameter is provided, it filters the channels based on the given URLs.
+     *
+     * @param urls The list of URLs to filter the channels (optional)
+     * @return A ResponseEntity containing the list of RSS channels
+     */
     @GetMapping
     public ResponseEntity<Iterable<RssChannel>> getAllChannels(@RequestParam(required = false) List<String> urls) {
         List<RssChannel> rssChannelList;
