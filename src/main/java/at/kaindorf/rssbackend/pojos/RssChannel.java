@@ -28,11 +28,8 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssChannel {
     @EqualsAndHashCode.Include
-    private String feedUrl;
-
     @Id
-    @GeneratedValue
-    private Long channel_id;
+    private String feedUrl;
 
     private String title;
     private String link;
@@ -46,11 +43,11 @@ public class RssChannel {
     @XmlElement(name = "image")
     private RssImage rssImage;
 
-    @OneToMany(mappedBy = "rssChannel", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rssChannel", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @XmlElement(name = "item")
     private List<RssItem> rssItems;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssCategory category;
 
     private String copyright;

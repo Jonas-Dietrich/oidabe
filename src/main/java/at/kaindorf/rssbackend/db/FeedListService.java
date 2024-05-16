@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FeedListService {
     private final RssChannelRepo rssChannelRepo;
-    private final InitDatabase initDatabase;
+    private final RssUpdater rssUpdater;
 
     /**
      * Retrieves all RSS channels from the database.
@@ -41,9 +41,7 @@ public class FeedListService {
      * @throws Exception if an error occurs while retrieving or loading the channels
      */
     public List<RssChannel> getChannels(List<String> urls) throws Exception {
-        for (String url : urls) {
-            initDatabase.loadData(url);
-        }
+        rssUpdater.updateAllFeeds(urls);
         return getChannels().stream().filter(c -> urls.contains(c.getFeedUrl())).collect(Collectors.toList());
     }
 }

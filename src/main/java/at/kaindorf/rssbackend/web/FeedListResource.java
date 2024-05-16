@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * Project: RSSBackend
+ * Created by: eibmac20
+ * Date: 16.05.24
  * This class represents the REST controller for managing the feed list.
  * It handles HTTP requests related to the feed list resource.
  */
@@ -32,8 +35,6 @@ public class FeedListResource {
     @GetMapping
     public ResponseEntity<Iterable<RssChannel>> getAllChannels(@RequestParam(required = false) List<String> urls) {
         List<RssChannel> rssChannelList;
-
-        log.info("request to feed-list");
 
         try {
             if (urls == null || urls.isEmpty()) {

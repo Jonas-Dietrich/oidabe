@@ -47,14 +47,14 @@ public class RssItem {
     @XmlJavaTypeAdapter(LocalDateConverter.class)
     private LocalDateTime pubDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssCategory category;
 
     private String author;
     private String comments;
     private String guid;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssSource source;
 
 

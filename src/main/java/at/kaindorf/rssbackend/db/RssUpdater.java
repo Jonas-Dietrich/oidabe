@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * Project: RSSBackend
  * Created by: eibmac20
@@ -17,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class InitDatabase {
+public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
 
     /**
@@ -34,5 +37,14 @@ public class InitDatabase {
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
         channel.setFeedUrl(feedUrl);
         if (!rssChannelRepo.existsByFeedUrl(feedUrl)) rssChannelRepo.save(rss.getChannel());
+    }
+
+    public void updateAllFeeds(List<String> urls) throws Exception {
+        for (String url : urls) {
+            RssChannel channel = rssChannelRepo.findRssChannelByFeedUrl(url);
+            if (channel == null) {
+                loadData(url);
+            }
+        }
     }
 }
