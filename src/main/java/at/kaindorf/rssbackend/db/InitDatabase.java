@@ -2,7 +2,6 @@ package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.RssChannel;
 import at.kaindorf.rssbackend.pojos.RssOuter;
-import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
