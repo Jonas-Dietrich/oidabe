@@ -56,4 +56,9 @@ public class RssItem {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private RssSource source;
+
+
+    public String toString() {
+        return String.format("%d: %s, %s", item_id, title, link);
+    }
 }
