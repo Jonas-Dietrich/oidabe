@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
  * Project: RSSBackend
  * Created by: diejoc20
  * Date: 03.05.24
- */
+ * The RssOuter class represents the outer structure of an RSS feed.
+ * It is annotated with JAXB annotations to define its XML marshalling behaviour.
+ * The class uses Lombok annotations.
+*/
 @Data
 @XmlRootElement
 @NoArgsConstructor

@@ -14,6 +14,8 @@ import java.util.List;
  * Project: RSSBackend
  * Created by: eibmac20
  * Date: 16.05.24
+ * This class represents the REST controller for managing the item list.
+ * It handles HTTP requests related to the item list resource.
 */
 
 @RestController
@@ -24,6 +26,13 @@ import java.util.List;
 public class ItemListResource {
     private final ItemListService itemListService;
 
+    /**
+     * This method retrieves all RSS items from the item list.
+     * If the 'urls' parameter is provided, it filters the items based on the given URLs.
+     *
+     * @param urls The list of URLs to filter the items (optional)
+     * @return A ResponseEntity containing the list of RSS items
+     */
     @GetMapping
     public ResponseEntity<Iterable<RssItem>> getRssItems(@RequestParam(required = false) List<String> urls) {
         List<RssItem> rssItemList;

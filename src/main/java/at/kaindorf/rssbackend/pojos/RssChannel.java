@@ -18,7 +18,10 @@ import java.util.List;
  * Project: RSSBackend
  * Created by: diejoc20
  * Date: 09.04.24
- */
+ * The RssChannel class represents a single RSS feed channel.
+ * It includes details about the channel such as the feed URL, title, link, description, last build date, image, items, category, and other metadata.
+ * This class is also a JPA entity, meaning instances of this class can be automatically persisted in a database.
+*/
 
 @Entity
 @Data

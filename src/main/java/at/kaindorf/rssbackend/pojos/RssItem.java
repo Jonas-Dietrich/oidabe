@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
  * Project: RSSBackend
  * Created by: diejoc20
  * Date: 09.04.24
+ * The RssItem class represents an item in an RSS feed.
+ * The class uses Lombok annotations for automatic generation of getters, setters, equals, hashCode and toString methods.
+ * It also uses JAXB annotations for defining XML marshalling behaviour.
  */
 
 @Entity
