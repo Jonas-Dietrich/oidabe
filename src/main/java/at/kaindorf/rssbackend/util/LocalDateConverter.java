@@ -12,10 +12,8 @@ import java.util.Locale;
  * Date: 09.04.24
  * This class is a custom XmlAdapter used for converting LocalDateTime objects to and from XML strings.
  * It is used in the RSSBackend project.
- * 
- * The format used for the XML representation of LocalDateTime is "EEE, dd MMM yyyy HH:mm:ss zzz" in English locale.
- * 
- * @see jakarta.xml.bind.annotation.adapters.XmlAdapter
+  * The format used for the XML representation of LocalDateTime is "EEE, dd MMM yyyy HH:mm:ss zzz" in English locale.
+  * @see jakarta.xml.bind.annotation.adapters.XmlAdapter
 */
 public class LocalDateConverter extends XmlAdapter<String, LocalDateTime> {
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);

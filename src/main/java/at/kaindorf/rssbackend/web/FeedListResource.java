@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class represents the REST controller for managing the feed list.
@@ -38,7 +36,7 @@ public class FeedListResource {
         log.info("request to feed-list");
 
         try {
-            if (urls == null || (urls != null && urls.isEmpty())) {
+            if (urls == null || urls.isEmpty()) {
                 rssChannelList = feedListService.getChannels();
             }
             else {

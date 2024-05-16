@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  * Project: RSSBackend
  * Created by: eibmac20
  * Date: 09.04.24
- *
  * This class is responsible for initializing the database with RSS channel data.
  * It provides a method to load data from a given feed URL and persist it to the database.
  */
