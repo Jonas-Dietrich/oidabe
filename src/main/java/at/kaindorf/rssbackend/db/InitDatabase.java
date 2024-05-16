@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class InitDatabase {
     private final RssChannelRepo rssChannelRepo;
-    private final RssItemRepo rssItemRepo;
 
     public void loadData(String feedUrl) throws Exception {
         RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
