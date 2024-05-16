@@ -4,7 +4,5 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
 COPY --from=build /target/RSSBackend-0.0.1-SNAPSHOT.jar demo.jar
-EXPOSE 49423
-EXPOSE 5432
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","demo.jar"]
