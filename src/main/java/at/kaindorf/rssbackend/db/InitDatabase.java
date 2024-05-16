@@ -19,14 +19,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class InitDatabase {
-
-    private final String feedUrl = "https://www.kleinezeitung.at/rss/service/newsticker";
-
     private final RssChannelRepo rssChannelRepo;
     private final RssItemRepo rssItemRepo;
 
-    @PostConstruct
-    public void loadData() {
+    public void loadData(String feedUrl) throws Exception {
         RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
         RssChannel channel = rss.getChannel();
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
