@@ -1,12 +1,15 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.RssChannel;
+import at.kaindorf.rssbackend.pojos.RssItem;
 import at.kaindorf.rssbackend.pojos.RssOuter;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Project: RSSBackend
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class InitDatabase {
+public class DatabaseSpooler {
 
     private final String feedUrl = "https://www.kleinezeitung.at/rss/service/newsticker";
 
@@ -26,11 +29,22 @@ public class InitDatabase {
     private final RssItemRepo rssItemRepo;
 
     @PostConstruct
-    public void loadData() {
-        RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
+    public void initializeSpooling() {
+        loadData(feedUrl);
+    }
+
+    public void loadData(String url) {
+        RssOuter rss = JAXB.unmarshal(url, RssOuter.class);
         RssChannel channel = rss.getChannel();
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
-        channel.setFeedUrl(feedUrl);
-        if (!rssChannelRepo.existsByFeedUrl(feedUrl)) rssChannelRepo.save(rss.getChannel());
+        channel.setFeedUrl(url);
+        if (!rssChannelRepo.existsByFeedUrl(url)) rssChannelRepo.save(rss.getChannel());
     }
+
+    public List<RssItem> getItemsFromDB(String url) {
+        RssChannel channel = rssChannelRepo.findRssChannelByFeedUrl(url);
+
+        return channel.getRssItems();
+    }
+
 }
