@@ -2,7 +2,6 @@ package at.kaindorf.rssbackend.web;
 
 import at.kaindorf.rssbackend.db.ItemListService;
 import at.kaindorf.rssbackend.pojos.ApiItemList;
-import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
