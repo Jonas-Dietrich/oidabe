@@ -41,10 +41,14 @@ public class RssUpdater {
 
     public void updateAllFeeds(List<String> urls) throws Exception {
         for (String url : urls) {
-            RssChannel channel = rssChannelRepo.findRssChannelByFeedUrl(url);
-            if (channel == null) {
-                loadData(url);
-            }
+            updateFeed(url);
+        }
+    }
+
+    public void updateFeed(String url) throws Exception {
+        RssChannel channel = rssChannelRepo.findRssChannelByFeedUrl(url);
+        if (channel == null) {
+            loadData(url);
         }
     }
 }

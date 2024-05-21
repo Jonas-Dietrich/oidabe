@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.web;
 
 import at.kaindorf.rssbackend.db.ItemListService;
+import at.kaindorf.rssbackend.pojos.ApiItemList;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Project: RSSBackend
@@ -34,15 +36,15 @@ public class ItemListResource {
      * @return A ResponseEntity containing the list of RSS items
      */
     @GetMapping
-    public ResponseEntity<Iterable<RssItem>> getRssItems(@RequestParam(required = false) List<String> urls) {
-        List<RssItem> rssItemList;
+    public ResponseEntity<Iterable<ApiItemList>> getRssItems(@RequestParam(required = false) List<String> urls) {
+        List<ApiItemList> rssItemList;
 
         try {
             if (urls == null || urls.isEmpty()) {
-                rssItemList = itemListService.getFeed();
+                rssItemList = itemListService.getFeed().stream().map(ApiItemList::new).collect(Collectors.toList());
             }
             else {
-                rssItemList = itemListService.getFeed(urls);
+                rssItemList = itemListService.getFeed(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
             }
             return ResponseEntity.ok(rssItemList);
         }

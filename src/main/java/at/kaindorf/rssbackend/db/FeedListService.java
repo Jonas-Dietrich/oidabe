@@ -44,4 +44,9 @@ public class FeedListService {
         rssUpdater.updateAllFeeds(urls);
         return getChannels().stream().filter(c -> urls.contains(c.getFeedUrl())).collect(Collectors.toList());
     }
+
+    public RssChannel getChannel(String url) throws Exception {
+        rssUpdater.updateFeed(url);
+        return rssChannelRepo.findRssChannelByFeedUrl(url);
+    }
 }
