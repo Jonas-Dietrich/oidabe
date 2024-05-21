@@ -28,7 +28,7 @@ public class RssUpdater {
      * establishing a relationship between the channel and its items.
      *
      * @param feedUrl the URL of the RSS feed to load data from
-     * @throws Exception if an error occurs during data loading or persistence
+     * @throws RuntimeException if an error occurs during data loading or persistence
      */
     public void loadData(String feedUrl) throws RuntimeException {
         RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
