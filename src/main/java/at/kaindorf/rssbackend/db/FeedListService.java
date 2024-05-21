@@ -26,7 +26,7 @@ public class FeedListService {
      * Retrieves all RSS channels from the database.
      *
      * @return a list of all RSS channels
-     * @throws Exception if an error occurs while retrieving the channels
+     * @throws RuntimeException if an error occurs while retrieving the channels
      */
     public List<RssChannel> getChannels() throws RuntimeException {
         return rssChannelRepo.findAll();
@@ -38,9 +38,9 @@ public class FeedListService {
      *
      * @param urls the list of URLs to retrieve channels from
      * @return a list of RSS channels matching the provided URLs
-     * @throws Exception if an error occurs while retrieving or loading the channels
+     * @throws RuntimeException if an error occurs while retrieving or loading the channels
      */
-    public List<RssChannel> getChannels(List<String> urls) throws Exception {
+    public List<RssChannel> getChannels(List<String> urls) throws RuntimeException {
         rssUpdater.updateAllFeeds(urls);
         return getChannels().stream().filter(c -> urls.contains(c.getFeedUrl())).collect(Collectors.toList());
     }
