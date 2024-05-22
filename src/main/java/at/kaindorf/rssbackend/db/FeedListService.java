@@ -45,6 +45,14 @@ public class FeedListService {
         return getChannels().stream().filter(c -> urls.contains(c.getFeedUrl())).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a single RSS channel based on the provided URL.
+     * It updates the channel so that the user always gets the latest data.
+     *
+     * @param url the URL of the RSS channel to retrieve
+     * @return the RSS channel matching the provided URL
+     * @throws RuntimeException if an error occurs while retrieving or loading the channel
+     */
     public RssChannel getChannel(String url) throws RuntimeException {
         rssUpdater.updateFeed(url);
         return rssChannelRepo.findRssChannelByFeedUrl(url);
