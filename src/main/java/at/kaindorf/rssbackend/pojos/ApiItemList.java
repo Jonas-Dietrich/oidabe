@@ -22,6 +22,7 @@ public class ApiItemList {
 
     public ApiItemList(RssItem rssItem) {
         item_id = rssItem.getItem_id();
+        title = rssItem.getTitle();
         link = rssItem.getLink();
         description = rssItem.getDescription();
         rssChannel = new ApiChannelList(rssItem.getRssChannel());

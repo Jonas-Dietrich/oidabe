@@ -1,5 +1,6 @@
 package at.kaindorf.rssbackend.pojos;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -31,10 +32,14 @@ public class RssImage {
     @EqualsAndHashCode.Exclude
     private Long image_id;
 
+    @Column(columnDefinition = "TEXT")
     private String url;
+    @Column(columnDefinition = "TEXT")
     private String link;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Short height = 31;
     private Short width = 88;
+    @Column(columnDefinition = "TEXT")
     private String title;
 }

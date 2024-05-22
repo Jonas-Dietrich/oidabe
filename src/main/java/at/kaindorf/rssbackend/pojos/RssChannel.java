@@ -34,7 +34,9 @@ public class RssChannel {
     @Id
     private String feedUrl;
 
+    @Column(columnDefinition = "TEXT")
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String link;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -53,11 +55,18 @@ public class RssChannel {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssCategory category;
 
+    @Column(columnDefinition = "TEXT")
     private String copyright;
+    @Column(columnDefinition = "TEXT")
     private String docs;
+    @Column(columnDefinition = "TEXT")
     private String generator;
+    @Column(columnDefinition = "TEXT")
     private String language;
+    @Column(columnDefinition = "TEXT")
     private String managingEditor;
+    @Column(columnDefinition = "TEXT")
     private String rating;
+    @Column(columnDefinition = "TEXT")
     private String webMaster;
 }

@@ -1,5 +1,6 @@
 package at.kaindorf.rssbackend.pojos;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -32,9 +33,11 @@ public class RssSource {
 
     @XmlValue
     @EqualsAndHashCode.Include
+    @Column(columnDefinition = "TEXT")
     private String sourceName;
 
     @XmlAttribute
     @EqualsAndHashCode.Include
+    @Column(columnDefinition = "TEXT")
     private String url;
 }

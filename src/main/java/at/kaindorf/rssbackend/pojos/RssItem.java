@@ -32,10 +32,14 @@ public class RssItem {
     @EqualsAndHashCode.Exclude
     private Long item_id;
 
-    private String title;
+    @Column(columnDefinition = "TEXT")
     private String link;
+
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(columnDefinition = "TEXT")
+    private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @XmlElement(name = "channel")
@@ -53,8 +57,11 @@ public class RssItem {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssCategory category;
 
+    @Column(columnDefinition = "TEXT")
     private String author;
+    @Column(columnDefinition = "TEXT")
     private String comments;
+    @Column(columnDefinition = "TEXT")
     private String guid;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

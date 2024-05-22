@@ -37,7 +37,9 @@ public class RssEnclosureURL {
     @Column(columnDefinition = "TEXT")
     private String url;
     @XmlAttribute(name = "length")
+    @Column(columnDefinition = "TEXT")
     private String length;
+    @Column(columnDefinition = "TEXT")
     @XmlAttribute(name = "type")
     private String type;
 }
