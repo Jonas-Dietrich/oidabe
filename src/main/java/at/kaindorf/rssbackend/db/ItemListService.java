@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Project: RssBackend
@@ -20,12 +21,16 @@ public class ItemListService {
     private final RssItemRepo rssItemRepo;
     private final RssUpdater rssUpdater;
 
-    public List<RssItem> getFeed() throws Exception {
+    public List<RssItem> getFeedItems() throws RuntimeException {
         return rssItemRepo.findAll();
     }
 
-    public List<RssItem> getFeed(List<String> urls) throws Exception {
+    public List<RssItem> getFeedItems(List<String> urls) throws RuntimeException {
         rssUpdater.updateAllFeeds(urls);
         return rssItemRepo.getRssItemByUrls(urls);
+    }
+
+    public Optional<RssItem> getFeedItem(Long itemId) {
+        return rssItemRepo.findById(itemId);
     }
 }

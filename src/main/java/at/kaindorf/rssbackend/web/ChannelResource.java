@@ -1,7 +1,7 @@
 package at.kaindorf.rssbackend.web;
 
 import at.kaindorf.rssbackend.db.FeedListService;
-import at.kaindorf.rssbackend.pojos.ApiChannelList;
+import at.kaindorf.rssbackend.pojos.ApiChannelListItem;
 import at.kaindorf.rssbackend.pojos.RssChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/feed-list")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-public class FeedListResource {
+public class ChannelResource {
     private final FeedListService feedListService;
 
     /**
@@ -35,14 +35,14 @@ public class FeedListResource {
      * @return A ResponseEntity containing the list of RSS channels
      */
     @GetMapping
-    public ResponseEntity<Iterable<ApiChannelList>> getAllChannels(@RequestParam(required = false) List<String> urls) {
-        List<ApiChannelList> rssChannelList;
+    public ResponseEntity<Iterable<ApiChannelListItem>> getAllChannels(@RequestParam(required = false) List<String> urls) {
+        List<ApiChannelListItem> rssChannelList;
 
         try {
             if (urls == null || urls.isEmpty()) {
-                rssChannelList = feedListService.getChannels().stream().map(ApiChannelList::new).collect(Collectors.toList());
+                rssChannelList = feedListService.getChannels().stream().map(ApiChannelListItem::new).collect(Collectors.toList());
             } else {
-                rssChannelList = feedListService.getChannels(urls).stream().map(ApiChannelList::new).collect(Collectors.toList());
+                rssChannelList = feedListService.getChannels(urls).stream().map(ApiChannelListItem::new).collect(Collectors.toList());
             }
             return ResponseEntity.ok(rssChannelList);
         } catch (Exception e) {
@@ -62,11 +62,11 @@ public class FeedListResource {
      * or an error status
      */
     @PostMapping
-    public ResponseEntity<ApiChannelList> addChannel(@RequestParam String url) {
+    public ResponseEntity<ApiChannelListItem> addChannel(@RequestParam String url) {
         try {
             RssChannel rssChannel = feedListService.getChannel(url);
             if (rssChannel == null) return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body(new ApiChannelList(rssChannel));
+            return ResponseEntity.ok().body(new ApiChannelListItem(rssChannel));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

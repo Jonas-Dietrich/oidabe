@@ -2,6 +2,7 @@ package at.kaindorf.rssbackend.web;
 
 import at.kaindorf.rssbackend.db.ItemListService;
 import at.kaindorf.rssbackend.pojos.ApiItemList;
+import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/item-list")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-public class ItemListResource {
+public class ItemResource {
     private final ItemListService itemListService;
 
     /**
@@ -40,11 +42,35 @@ public class ItemListResource {
 
         try {
             if (urls == null || urls.isEmpty()) {
-                rssItemList = itemListService.getFeed().stream().map(ApiItemList::new).collect(Collectors.toList());
+                rssItemList = itemListService.getFeedItems().stream().map(ApiItemList::new).collect(Collectors.toList());
             } else {
-                rssItemList = itemListService.getFeed(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
+                rssItemList = itemListService.getFeedItems(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
             }
             return ResponseEntity.ok(rssItemList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * This method retrieves a specific RSS item from the item list based on the provided item ID.
+     * If the item with the given ID does not exist, it returns a 404 Not Found HTTP status.
+     * In case of any other exception, it returns a 500 Internal Server Error HTTP status.
+     *
+     * @param itemId The ID of the RSS item to retrieve
+     * @return A ResponseEntity containing the RSS item if found, otherwise an HTTP status indicating the error
+     */
+    @GetMapping("/{itemId}")
+    public ResponseEntity<ApiItemList> getRssItem(@PathVariable Long itemId) {
+        try {
+            Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
+            if (optionalRssItem.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            else {
+                return ResponseEntity.ok(new ApiItemList(optionalRssItem.get()));
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

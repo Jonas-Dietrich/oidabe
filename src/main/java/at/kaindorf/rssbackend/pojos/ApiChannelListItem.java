@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * Date: 21.05.24
  */
 @Data
-public class ApiChannelList {
+public class ApiChannelListItem {
     private String feedUrl;
     private String title;
     private String link;
@@ -19,7 +19,7 @@ public class ApiChannelList {
     private RssImage rssImage;
     private RssCategory category;
 
-    public ApiChannelList(RssChannel channel) {
+    public ApiChannelListItem(RssChannel channel) {
         this.feedUrl = channel.getFeedUrl();
         this.title = channel.getTitle();
         this.link = channel.getLink();

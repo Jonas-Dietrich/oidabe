@@ -1,0 +1,9 @@
+GET http://localhost:8080/feed-list?urls=https://www.diepresse.com/rss/Innenpolitik,https://www.derstandard.at/rss/live,https://www.derstandard.at/rss/recht
+
+###
+
+GET http://localhost:8080/item-list?urls=https://www.derstandard.at/rss/recht
+
+###
+
+GET http://localhost:8080/item-list/10

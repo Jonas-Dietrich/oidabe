@@ -16,7 +16,7 @@ public class ApiItemList {
     private String title;
     private String link;
     private String description;
-    private ApiChannelList rssChannel;
+    private ApiChannelListItem rssChannel;
     private LocalDateTime pubDate;
     private String author;
 
@@ -25,7 +25,7 @@ public class ApiItemList {
         title = rssItem.getTitle();
         link = rssItem.getLink();
         description = rssItem.getDescription();
-        rssChannel = new ApiChannelList(rssItem.getRssChannel());
+        rssChannel = new ApiChannelListItem(rssItem.getRssChannel());
         pubDate = rssItem.getPubDate();
         author = rssItem.getAuthor();
     }
