@@ -20,13 +20,13 @@ public class LocalDateConverter extends XmlAdapter<String, LocalDateTime> {
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 
     @Override
-    public LocalDateTime unmarshal(String dateString) throws Exception {
+    public LocalDateTime unmarshal(String dateString) throws RuntimeException {
         if (dateString != null && !dateString.isBlank()) return LocalDateTime.parse(dateString, DTF);
         return null;
     }
 
     @Override
-    public String marshal(LocalDateTime localDate) throws Exception {
+    public String marshal(LocalDateTime localDate) throws RuntimeException {
         if (localDate != null) return localDate.format(DTF);
         return null;
     }
