@@ -65,12 +65,7 @@ public class ItemResource {
     public ResponseEntity<ApiItemList> getRssItem(@PathVariable Long itemId) {
         try {
             Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
-            if (optionalRssItem.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-            else {
-                return ResponseEntity.ok(new ApiItemList(optionalRssItem.get()));
-            }
+            return optionalRssItem.map(rssItem -> ResponseEntity.ok(new ApiItemList(rssItem))).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
