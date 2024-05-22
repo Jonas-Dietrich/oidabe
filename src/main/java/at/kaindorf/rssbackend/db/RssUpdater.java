@@ -38,12 +38,26 @@ public class RssUpdater {
         if (!rssChannelRepo.existsByFeedUrl(feedUrl)) rssChannelRepo.save(rss.getChannel());
     }
 
+    /**
+     * Updates all the feeds from the provided list of URLs.
+     * This method iterates over the list and calls the updateFeed method for each URL.
+     *
+     * @param urls the list of URLs of the RSS feeds to update
+     * @throws RuntimeException if an error occurs during data loading or persistence
+     */
     public void updateAllFeeds(List<String> urls) throws RuntimeException {
         for (String url : urls) {
             updateFeed(url);
         }
     }
 
+    /**
+     * Updates the feed from the provided URL.
+     * This method checks if a channel exists for the given URL, if not it calls the loadData method to create one.
+     *
+     * @param url the URL of the RSS feed to update
+     * @throws RuntimeException if an error occurs during data loading or persistence
+     */
     public void updateFeed(String url) throws RuntimeException {
         RssChannel channel = rssChannelRepo.findRssChannelByFeedUrl(url);
         if (channel == null) {

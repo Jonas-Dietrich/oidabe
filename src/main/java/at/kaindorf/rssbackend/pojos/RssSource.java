@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  * The RssSource class represents the source of an RSS feed and is an optional feature that feeds may implement.
  * The class uses Lombok annotations.
  * It also uses JAXB annotations for defining XML marshalling behaviour.
-*/
+ */
 
 @Entity
 @Data

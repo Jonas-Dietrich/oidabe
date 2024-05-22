@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  * The RssCategory class represents a single RSS feed category.
  * It includes details about the category such as the category ID, category name, and domain.
  * This class is also a JPA entity, meaning instances of this class can be automatically persisted in a database.
-*/
+ */
 
 @Entity
 @Data

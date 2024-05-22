@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Date: 16.05.24
  * This class represents the REST controller for managing the item list.
  * It handles HTTP requests related to the item list resource.
-*/
+ */
 
 @RestController
 @Slf4j
@@ -41,13 +41,11 @@ public class ItemListResource {
         try {
             if (urls == null || urls.isEmpty()) {
                 rssItemList = itemListService.getFeed().stream().map(ApiItemList::new).collect(Collectors.toList());
-            }
-            else {
+            } else {
                 rssItemList = itemListService.getFeed(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
             }
             return ResponseEntity.ok(rssItemList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

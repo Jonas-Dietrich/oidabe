@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
  * It is annotated as an Entity, meaning it is a JPA entity and is mapped to a database table.
  * The class uses Lombok annotations for automatic generation of getters, setters, equals, hashCode and toString methods.
  * It also uses JAXB annotations for defining XML marshalling behaviour.
-*/
+ */
 
 @Entity
 @Data

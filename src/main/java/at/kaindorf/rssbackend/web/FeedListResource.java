@@ -41,18 +41,26 @@ public class FeedListResource {
         try {
             if (urls == null || urls.isEmpty()) {
                 rssChannelList = feedListService.getChannels().stream().map(ApiChannelList::new).collect(Collectors.toList());
-            }
-            else {
+            } else {
                 rssChannelList = feedListService.getChannels(urls).stream().map(ApiChannelList::new).collect(Collectors.toList());
             }
             return ResponseEntity.ok(rssChannelList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    /**
+     * Adds a new RSS channel to the feed list.
+     * The channel is identified by the provided URL.
+     * If the channel does not exist, a 404 Not Found status is returned.
+     * In case of any other exception, a 500 Internal Server Error status is returned.
+     *
+     * @param url The URL of the RSS channel to add
+     * @return A ResponseEntity containing the added RSS channel wrapped in an ApiChannelList object
+     * or an error status
+     */
     @PostMapping
     public ResponseEntity<ApiChannelList> addChannel(@RequestParam String url) {
         try {
