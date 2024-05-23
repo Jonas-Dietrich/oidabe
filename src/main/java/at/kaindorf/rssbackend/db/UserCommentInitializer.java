@@ -22,11 +22,6 @@ import java.util.ArrayList;
 @Slf4j
 public class UserCommentInitializer {
     private final RssChannelRepo rssChannelRepo;
-    private final HttpServletRequest request;
-
-
-    private final String API_COMMENT_TITLE = "Really-Sophisticated-Story-Feed comments";
-    private final String API_COMMENT_DESCRIPTION = "Comments for the Really-Sophisticated-Story-Feed. Feel free to leave your thoughts!";
 
     @Value("${API_COMMENT_URL}")
     private String API_COMMENT_URL;
@@ -34,6 +29,8 @@ public class UserCommentInitializer {
     @PostConstruct
     private void createCommentChannel() {
         if (!rssChannelRepo.existsByFeedUrl(API_COMMENT_URL)) {
+            String API_COMMENT_TITLE = "Really-Sophisticated-Story-Feed comments";
+            String API_COMMENT_DESCRIPTION = "Comments for the Really-Sophisticated-Story-Feed. Feel free to leave your thoughts!";
             RssChannel commentChannel = new RssChannel(
                     API_COMMENT_URL,
                     API_COMMENT_TITLE,

@@ -4,10 +4,8 @@ import at.kaindorf.rssbackend.pojos.RssChannel;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
