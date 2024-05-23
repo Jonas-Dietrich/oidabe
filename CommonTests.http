@@ -7,3 +7,21 @@ GET http://localhost:8080/item-list?urls=https://www.derstandard.at/rss/recht
 ###
 
 GET http://localhost:8080/item-list/10
+
+
+###
+
+GET http://localhost:8080/comments/2022-01-01
+
+###
+
+POST http://localhost:8080/comments
+Content-Type: application/json
+
+{
+  "comment": {
+    "item_id": 1,
+    "description": "BAD BAD BAD",
+    "title": "Comment title"
+  }
+}

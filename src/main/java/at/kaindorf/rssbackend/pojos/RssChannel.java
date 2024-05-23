@@ -30,6 +30,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssChannel {
+    public RssChannel(String feedUrl, String title, String description, LocalDateTime lastBuildDate, List<RssItem> rssItems) {
+        this.feedUrl = feedUrl;
+        this.title = title;
+        this.description = description;
+        this.lastBuildDate = lastBuildDate;
+        this.rssItems = rssItems;
+    }
+
     @EqualsAndHashCode.Include
     @Id
     private String feedUrl;
