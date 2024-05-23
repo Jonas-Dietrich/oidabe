@@ -19,6 +19,12 @@ public class ApiChannelListItem {
     private RssImage rssImage;
     private RssCategory category;
 
+    /**
+     * Constructor for the ApiChannelListItem class.
+     * It initializes the object with the data from the provided RssChannel object.
+     *
+     * @param channel The RssChannel object from which to initialize the ApiChannelListItem object.
+     */
     public ApiChannelListItem(RssChannel channel) {
         this.feedUrl = channel.getFeedUrl();
         this.title = channel.getTitle();

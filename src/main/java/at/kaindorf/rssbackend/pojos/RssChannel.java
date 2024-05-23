@@ -30,6 +30,16 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssChannel {
+    /**
+     * Constructor for the RssChannel class.
+     * It initializes the object with the data provided.
+     *
+     * @param feedUrl The feed URL of the RSS channel.
+     * @param title The title of the RSS channel.
+     * @param description The description of the RSS channel.
+     * @param lastBuildDate The last build date of the RSS channel.
+     * @param rssItems The list of items in the RSS channel.
+     */
     public RssChannel(String feedUrl, String title, String description, LocalDateTime lastBuildDate, List<RssItem> rssItems) {
         this.feedUrl = feedUrl;
         this.title = title;
