@@ -41,7 +41,7 @@ public class ItemResource {
         List<ApiItemList> rssItemList;
 
         try {
-            if (urls == null || urls.isEmpty()) {
+            if (urls == null) {
                 rssItemList = itemListService.getFeedItems().stream().map(ApiItemList::new).collect(Collectors.toList());
             } else {
                 rssItemList = itemListService.getFeedItems(urls).stream().map(ApiItemList::new).collect(Collectors.toList());

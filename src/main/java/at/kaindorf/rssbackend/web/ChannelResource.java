@@ -39,7 +39,7 @@ public class ChannelResource {
         List<ApiChannelListItem> rssChannelList;
 
         try {
-            if (urls == null || urls.isEmpty()) {
+            if (urls == null) {
                 rssChannelList = feedListService.getChannels().stream().map(ApiChannelListItem::new).collect(Collectors.toList());
             } else {
                 rssChannelList = feedListService.getChannels(urls).stream().map(ApiChannelListItem::new).collect(Collectors.toList());
