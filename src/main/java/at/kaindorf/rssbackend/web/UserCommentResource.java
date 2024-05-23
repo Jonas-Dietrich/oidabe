@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  * Project: RssBackend
  * Created by: eibmac20
  * Date: 23.05.24
- *
  * This class is a REST controller for managing user comments.
  * It provides endpoints for getting and posting user comments.
  */

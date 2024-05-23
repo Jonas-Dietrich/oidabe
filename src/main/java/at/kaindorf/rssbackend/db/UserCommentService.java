@@ -13,7 +13,6 @@ import java.util.List;
  * Project: RssBackend
  * Created by: eibmac20
  * Date: 23.05.24
- *
  * This class is a service for managing user comments.
  * It provides methods for posting and retrieving user comments.
  */
