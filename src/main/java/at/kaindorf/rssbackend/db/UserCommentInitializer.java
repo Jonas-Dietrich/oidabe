@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.RssChannel;
+import at.kaindorf.rssbackend.pojos.RssImage;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,8 @@ public class UserCommentInitializer {
                     API_COMMENT_TITLE,
                     API_COMMENT_DESCRIPTION,
                     LocalDateTime.now(),
-                    new ArrayList<>()
+                    new ArrayList<>(),
+                    new RssImage(API_COMMENT_URL + "/images/rssChannelLogo.png", "Content credentials: Generated with AI ∙ 24 May 2024 at 2:32 pm")
             );
             rssChannelRepo.save(commentChannel);
             log.info("user comments channel created");

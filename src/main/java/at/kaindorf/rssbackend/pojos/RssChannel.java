@@ -40,12 +40,13 @@ public class RssChannel {
      * @param lastBuildDate The last build date of the RSS channel.
      * @param rssItems The list of items in the RSS channel.
      */
-    public RssChannel(String feedUrl, String title, String description, LocalDateTime lastBuildDate, List<RssItem> rssItems) {
+    public RssChannel(String feedUrl, String title, String description, LocalDateTime lastBuildDate, List<RssItem> rssItems, RssImage rssImage) {
         this.feedUrl = feedUrl;
         this.title = title;
         this.description = description;
         this.lastBuildDate = lastBuildDate;
         this.rssItems = rssItems;
+        this.rssImage = rssImage;
     }
 
     @EqualsAndHashCode.Include
