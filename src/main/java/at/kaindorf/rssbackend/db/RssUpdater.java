@@ -21,7 +21,6 @@ import java.util.List;
 @Slf4j
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
-    private final RssItemRepo rssItemRepo;
 
     /**
      * Loads data from the specified feed URL and persists it to the database.
