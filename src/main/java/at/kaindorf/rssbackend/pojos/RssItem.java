@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD) // so löst man das problem
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssItem {
 
     @Id
@@ -33,6 +34,7 @@ public class RssItem {
     private Long item_id;
 
     @Column(columnDefinition = "TEXT")
+    @EqualsAndHashCode.Include
     private String link;
 
     @Column(columnDefinition = "TEXT")

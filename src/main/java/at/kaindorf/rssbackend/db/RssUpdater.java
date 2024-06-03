@@ -36,8 +36,7 @@ public class RssUpdater {
         RssChannel channel = rss.getChannel();
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
         channel.setFeedUrl(feedUrl);
-        if (!rssChannelRepo.existsByFeedUrl(feedUrl)) rssChannelRepo.save(rss.getChannel());
-        else if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssItemRepo.saveAll(channel.getRssItems());
+        if (!rssChannelRepo.existsByFeedUrl(feedUrl) || channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssChannelRepo.save(rss.getChannel());
     }
 
     /**
