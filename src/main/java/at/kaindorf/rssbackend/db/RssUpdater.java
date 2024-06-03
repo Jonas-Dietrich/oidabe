@@ -21,6 +21,7 @@ import java.util.List;
 @Slf4j
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
+    private final RssItemRepo rssItemRepo;
 
     /**
      * Loads data from the specified feed URL and persists it to the database.
@@ -36,6 +37,7 @@ public class RssUpdater {
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
         channel.setFeedUrl(feedUrl);
         if (!rssChannelRepo.existsByFeedUrl(feedUrl)) rssChannelRepo.save(rss.getChannel());
+        else if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssItemRepo.saveAll(channel.getRssItems());
     }
 
     /**
@@ -53,15 +55,11 @@ public class RssUpdater {
 
     /**
      * Updates the feed from the provided URL.
-     * This method checks if a channel exists for the given URL, if not it calls the loadData method to create one.
      *
      * @param url the URL of the RSS feed to update
      * @throws RuntimeException if an error occurs during data loading or persistence
      */
     public void updateFeed(String url) throws RuntimeException {
-        RssChannel channel = rssChannelRepo.findRssChannelByFeedUrl(url);
-        if (channel == null) {
-            loadData(url);
-        }
+        loadData(url);
     }
 }
