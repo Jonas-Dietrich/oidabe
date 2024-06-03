@@ -32,6 +32,11 @@ public class RssImage {
     @EqualsAndHashCode.Exclude
     private Long image_id;
 
+    public RssImage(String url, String title) {
+        this.url = url;
+        this.title = title;
+    }
+
     @Column(columnDefinition = "TEXT")
     private String url;
     @Column(columnDefinition = "TEXT")
