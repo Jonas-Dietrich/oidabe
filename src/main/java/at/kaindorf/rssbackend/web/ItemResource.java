@@ -106,6 +106,6 @@ public class ItemResource {
     @GetMapping("/full/{itemId}")
     public ResponseEntity<RssItem> getFullRssItem(@PathVariable Long itemId) {
         Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
-        return optionalRssItem.map(rssItem -> ResponseEntity.ok(rssItem)).orElseGet(() -> ResponseEntity.notFound().build());
+        return optionalRssItem.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
