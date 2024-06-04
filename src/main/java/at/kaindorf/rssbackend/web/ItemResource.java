@@ -62,6 +62,7 @@ public class ItemResource {
      * @param pageNo The page number to retrieve (optional, default is 0)
      * @param pageSize The number of items per page (optional, default is 10)
      * @param sortBy The property to sort the items by (optional, default is "item_id")
+     * @param asc Sort ascending or descending
      * @return A ResponseEntity containing the list of RSS items for the specified page
      */
     @GetMapping("/pages")
@@ -69,9 +70,11 @@ public class ItemResource {
             @RequestParam(required = false) List<String> urls,
             @RequestParam(required = false, defaultValue = "0") Integer pageNo,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "item_id") String sortBy) {
+            @RequestParam(required = false, defaultValue = "item_id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") Boolean asc) {
 
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
 
         if (urls == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
