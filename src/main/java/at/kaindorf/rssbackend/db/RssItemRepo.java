@@ -1,6 +1,8 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.RssItem;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,4 +32,7 @@ public interface RssItemRepo extends JpaRepository<RssItem, Long> {
      */
     @Query("select item from RssItem item where item.pubDate >= :evaluateUpTo and item.rssChannel.feedUrl = :feedUrl order by item.pubDate desc")
     List<RssItem> getItemsFromChannelAfterDate(LocalDateTime evaluateUpTo, String feedUrl);
+
+    @Query("select item from RssItem item where item.rssChannel.feedUrl in :feedUrls")
+    Page<RssItem> getRssItemByUrls(List<String> feedUrls, Pageable pageable);
 }

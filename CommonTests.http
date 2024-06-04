@@ -25,3 +25,7 @@ Content-Type: application/json
     "title": "Comment title"
   }
 }
+
+###
+
+GET http://localhost:8080/item-list/pages?pageSize=10&pageNo=0&urls=https://www.diepresse.com/rss/Politik

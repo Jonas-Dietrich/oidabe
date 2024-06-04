@@ -5,6 +5,10 @@ import at.kaindorf.rssbackend.pojos.ApiItemList;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,16 +44,28 @@ public class ItemResource {
     public ResponseEntity<Iterable<ApiItemList>> getRssItems(@RequestParam(required = false) List<String> urls) {
         List<ApiItemList> rssItemList;
 
-        try {
-            if (urls == null) {
-                rssItemList = itemListService.getFeedItems().stream().map(ApiItemList::new).collect(Collectors.toList());
-            } else {
-                rssItemList = itemListService.getFeedItems(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
-            }
-            return ResponseEntity.ok(rssItemList);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        if (urls == null) {
+            rssItemList = itemListService.getFeedItems().stream().map(ApiItemList::new).collect(Collectors.toList());
+        } else {
+            rssItemList = itemListService.getFeedItems(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
+        }
+        return ResponseEntity.ok(rssItemList);
+    }
+
+    @GetMapping("/pages")
+    public ResponseEntity<Iterable<RssItem>> getRssItemsPage(
+            @RequestParam(required = false) List<String> urls,
+            @RequestParam(required = false, defaultValue = "0") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "item_id") String sortBy) {
+        List<ApiItemList> rssItemList;
+
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        if (urls == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } else {
+            return ResponseEntity.ok(itemListService.getFeedItems(urls, paging));
         }
     }
 
@@ -63,12 +79,7 @@ public class ItemResource {
      */
     @GetMapping("/{itemId}")
     public ResponseEntity<ApiItemList> getRssItem(@PathVariable Long itemId) {
-        try {
-            Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
-            return optionalRssItem.map(rssItem -> ResponseEntity.ok(new ApiItemList(rssItem))).orElseGet(() -> ResponseEntity.notFound().build());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
+        return optionalRssItem.map(rssItem -> ResponseEntity.ok(new ApiItemList(rssItem))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

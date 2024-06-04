@@ -3,6 +3,8 @@ package at.kaindorf.rssbackend.db;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,6 +43,11 @@ public class ItemListService {
     public List<RssItem> getFeedItems(List<String> urls) throws RuntimeException {
         rssUpdater.updateAllFeeds(urls);
         return rssItemRepo.getRssItemByUrls(urls);
+    }
+
+    public Page<RssItem> getFeedItems(List<String> urls, Pageable paging) throws RuntimeException {
+        rssUpdater.updateAllFeeds(urls);
+        return rssItemRepo.getRssItemByUrls(urls, paging);
     }
 
     /**

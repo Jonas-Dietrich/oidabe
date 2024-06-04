@@ -38,17 +38,12 @@ public class ChannelResource {
     public ResponseEntity<Iterable<ApiChannelListItem>> getAllChannels(@RequestParam(required = false) List<String> urls) {
         List<ApiChannelListItem> rssChannelList;
 
-        try {
-            if (urls == null) {
-                rssChannelList = feedListService.getChannels().stream().map(ApiChannelListItem::new).collect(Collectors.toList());
-            } else {
-                rssChannelList = feedListService.getChannels(urls).stream().map(ApiChannelListItem::new).collect(Collectors.toList());
-            }
-            return ResponseEntity.ok(rssChannelList);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        if (urls == null) {
+            rssChannelList = feedListService.getChannels().stream().map(ApiChannelListItem::new).collect(Collectors.toList());
+        } else {
+            rssChannelList = feedListService.getChannels(urls).stream().map(ApiChannelListItem::new).collect(Collectors.toList());
         }
+        return ResponseEntity.ok(rssChannelList);
     }
 
     /**
@@ -63,13 +58,8 @@ public class ChannelResource {
      */
     @PostMapping
     public ResponseEntity<ApiChannelListItem> addChannel(@RequestParam String url) {
-        try {
-            RssChannel rssChannel = feedListService.getChannel(url);
-            if (rssChannel == null) return ResponseEntity.notFound().build();
-            return ResponseEntity.ok().body(new ApiChannelListItem(rssChannel));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        RssChannel rssChannel = feedListService.getChannel(url);
+        if (rssChannel == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(new ApiChannelListItem(rssChannel));
     }
 }
