@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,7 @@ public class RssUpdater {
             channel.getRssItems().removeAll(existingItems);
             Set<RssCategory> categorySet = new HashSet<>();
             if (channel.getCategory() != null) categorySet.add(channel.getCategory());
-            categorySet.addAll(channel.getRssItems().stream().map(i -> i.getCategory()).filter(c -> c != null).collect(Collectors.toSet()));
+            categorySet.addAll(channel.getRssItems().stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
             rssCategoryRepo.saveAll(categorySet);
             rssChannelRepo.save(channel);
         }
