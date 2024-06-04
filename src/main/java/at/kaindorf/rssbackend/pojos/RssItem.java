@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.pojos;
 
 import at.kaindorf.rssbackend.util.LocalDateConverter;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 public class RssItem {
     @Id
     @GeneratedValue
+    @JsonAlias("item_id")
     private Long itemId;
 
     @Column(columnDefinition = "TEXT")
