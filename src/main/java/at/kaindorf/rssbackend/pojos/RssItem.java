@@ -67,9 +67,4 @@ public class RssItem {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssSource source;
-
-
-    public String toString() {
-        return String.format("%d: %s, %s", title, link);
-    }
 }

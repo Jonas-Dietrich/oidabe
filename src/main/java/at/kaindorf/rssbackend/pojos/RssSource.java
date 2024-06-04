@@ -2,7 +2,6 @@ package at.kaindorf.rssbackend.pojos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.xml.bind.annotation.*;
 import lombok.AllArgsConstructor;

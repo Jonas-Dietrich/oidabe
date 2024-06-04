@@ -42,7 +42,4 @@ public interface RssItemRepo extends JpaRepository<RssItem, Long> {
      */
     @Query("select item from RssItem item where item.rssChannel.feedUrl in :feedUrls")
     Page<RssItem> getRssItemByUrls(List<String> feedUrls, Pageable pageable);
-
-    @Query("select item.link from RssItem item where item.link in :links")
-    List<String> findByLink(List<String> links);
 }
