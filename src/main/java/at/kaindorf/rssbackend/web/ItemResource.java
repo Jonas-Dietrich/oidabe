@@ -86,7 +86,6 @@ public class ItemResource {
     /**
      * This method retrieves a specific RSS item from the item list based on the provided item ID.
      * If the item with the given ID does not exist, it returns a 404 Not Found HTTP status.
-     * In case of any other exception, it returns a 500 Internal Server Error HTTP status.
      *
      * @param itemId The ID of the RSS item to retrieve
      * @return A ResponseEntity containing the RSS item if found, otherwise an HTTP status indicating the error
@@ -95,5 +94,18 @@ public class ItemResource {
     public ResponseEntity<ApiItemList> getRssItem(@PathVariable Long itemId) {
         Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
         return optionalRssItem.map(rssItem -> ResponseEntity.ok(new ApiItemList(rssItem))).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
+     * This method retrieves a specific RSS item from the item list based on the provided item ID.
+     * If the item with the given ID does not exist, it returns a 404 Not Found HTTP status.
+     *
+     * @param itemId The ID of the RSS item to retrieve
+     * @return A ResponseEntity containing the RSS item if found, otherwise an HTTP status indicating the error
+     */
+    @GetMapping("/full/{itemId}")
+    public ResponseEntity<RssItem> getFullRssItem(@PathVariable Long itemId) {
+        Optional<RssItem> optionalRssItem = itemListService.getFeedItem(itemId);
+        return optionalRssItem.map(rssItem -> ResponseEntity.ok(rssItem)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
