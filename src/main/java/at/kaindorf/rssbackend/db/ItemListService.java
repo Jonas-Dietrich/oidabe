@@ -45,6 +45,16 @@ public class ItemListService {
         return rssItemRepo.getRssItemByUrls(urls);
     }
 
+    /**
+     * Retrieves a paginated list of RssItem entities corresponding to the provided URLs.
+     * First, it updates all RSS feeds with the provided URLs.
+     * Then, it retrieves the RssItem entities corresponding to the provided URLs.
+     *
+     * @param urls List of URLs to update and retrieve the RssItems for
+     * @param paging Pageable object to apply pagination
+     * @return Page of RssItem entities corresponding to the provided URLs
+     * @throws RuntimeException if any error occurs during the update or retrieval
+     */
     public Page<RssItem> getFeedItems(List<String> urls, Pageable paging) throws RuntimeException {
         rssUpdater.updateAllFeeds(urls);
         return rssItemRepo.getRssItemByUrls(urls, paging);

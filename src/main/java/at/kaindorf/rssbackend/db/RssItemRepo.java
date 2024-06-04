@@ -33,6 +33,13 @@ public interface RssItemRepo extends JpaRepository<RssItem, Long> {
     @Query("select item from RssItem item where item.pubDate >= :evaluateUpTo and item.rssChannel.feedUrl = :feedUrl order by item.pubDate desc")
     List<RssItem> getItemsFromChannelAfterDate(LocalDateTime evaluateUpTo, String feedUrl);
 
+    /**
+     * Retrieves a paginated list of RssItems based on the provided feed URLs.
+     *
+     * @param feedUrls The list of feed URLs to retrieve RssItems from.
+     * @param pageable The pagination information (page number, size, sorting)
+     * @return A page of RssItems that belong to the channels with the provided feed URLs.
+     */
     @Query("select item from RssItem item where item.rssChannel.feedUrl in :feedUrls")
     Page<RssItem> getRssItemByUrls(List<String> feedUrls, Pageable pageable);
 }

@@ -51,6 +51,19 @@ public class ItemResource {
         return ResponseEntity.ok(rssItemList);
     }
 
+    /**
+     * This method retrieves a paginated list of RSS items from the item list.
+     * If the 'urls' parameter is provided, it filters the items based on the given URLs. If not, the request is bad.
+     * The 'pageNo' parameter determines the page number to retrieve, with 0 being the first page.
+     * The 'pageSize' parameter determines the number of items per page.
+     * The 'sortBy' parameter determines the property to sort the items by.
+     *
+     * @param urls The list of URLs to filter the items (optional)
+     * @param pageNo The page number to retrieve (optional, default is 0)
+     * @param pageSize The number of items per page (optional, default is 10)
+     * @param sortBy The property to sort the items by (optional, default is "item_id")
+     * @return A ResponseEntity containing the list of RSS items for the specified page
+     */
     @GetMapping("/pages")
     public ResponseEntity<Iterable<RssItem>> getRssItemsPage(
             @RequestParam(required = false) List<String> urls,
