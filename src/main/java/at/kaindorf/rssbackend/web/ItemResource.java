@@ -58,7 +58,6 @@ public class ItemResource {
             @RequestParam(required = false, defaultValue = "0") Integer pageNo,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
             @RequestParam(required = false, defaultValue = "item_id") String sortBy) {
-        List<ApiItemList> rssItemList;
 
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
