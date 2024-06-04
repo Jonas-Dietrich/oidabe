@@ -27,7 +27,6 @@ public class ApiItemList {
      * @param rssItem The RssItem object from which to initialize the ApiItemList object.
      */
     public ApiItemList(RssItem rssItem) {
-        item_id = rssItem.getItem_id();
         title = rssItem.getTitle();
         link = rssItem.getLink();
         description = rssItem.getDescription();

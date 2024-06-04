@@ -70,7 +70,7 @@ public class ItemResource {
             @RequestParam(required = false) List<String> urls,
             @RequestParam(required = false, defaultValue = "0") Integer pageNo,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "item_id") String sortBy,
+            @RequestParam(required = false, defaultValue = "itemId") String sortBy,
             @RequestParam(required = false, defaultValue = "true") Boolean asc) {
 
         Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;

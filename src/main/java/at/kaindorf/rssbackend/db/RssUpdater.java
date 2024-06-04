@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.RssChannel;
+import at.kaindorf.rssbackend.pojos.RssItem;
 import at.kaindorf.rssbackend.pojos.RssOuter;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Project: RSSBackend
@@ -21,6 +24,7 @@ import java.util.List;
 @Slf4j
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
+    private final RssItemRepo rssItemRepo;
 
     /**
      * Loads data from the specified feed URL and persists it to the database.
@@ -35,7 +39,11 @@ public class RssUpdater {
         RssChannel channel = rss.getChannel();
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
         channel.setFeedUrl(feedUrl);
-        if (!rssChannelRepo.existsByFeedUrl(feedUrl) || channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssChannelRepo.save(rss.getChannel());
+        if (!rssChannelRepo.existsByFeedUrl(feedUrl) || channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) {
+            List<RssItem> existingItems = rssItemRepo.findAll();
+            channel.getRssItems().removeAll(existingItems);
+            rssChannelRepo.save(channel);
+        }
     }
 
     /**

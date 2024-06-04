@@ -33,7 +33,6 @@ public class UserCommentService {
      * @throws RuntimeException if an error occurs while posting the comment.
      */
     public RssItem postComment(RssItem rssItem) throws RuntimeException {
-        rssItem.setItem_id(null);
         rssItem.setPubDate(LocalDateTime.now());
         RssChannel channel = userCommentInitializer.getUserCommentChannel();
         rssItem.setRssChannel(channel);

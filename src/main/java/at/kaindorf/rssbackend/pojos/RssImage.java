@@ -27,18 +27,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD) // so löst man das problem
 public class RssImage {
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Exclude
-    private Long image_id;
-
     public RssImage(String url, String title) {
         this.url = url;
         this.title = title;
     }
 
     @Column(columnDefinition = "TEXT")
+    @Id
     private String url;
+
     @Column(columnDefinition = "TEXT")
     private String link;
     @Column(columnDefinition = "TEXT")

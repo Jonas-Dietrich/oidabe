@@ -26,14 +26,10 @@ import lombok.NoArgsConstructor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssCategory {
-    @Id
-    @XmlTransient
-    @GeneratedValue
-    private Long categoryId;
-
     @XmlValue
     @EqualsAndHashCode.Include
     @Column(columnDefinition = "TEXT")
+    @Id
     private String categoryName;
 
     @XmlAttribute

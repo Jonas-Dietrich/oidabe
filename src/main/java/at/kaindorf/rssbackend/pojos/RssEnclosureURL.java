@@ -28,14 +28,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD) // so löst man das problem
 public class RssEnclosureURL {
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Exclude
-    private Long url_id;
-
     @XmlAttribute(name = "url")
     @Column(columnDefinition = "TEXT")
+    @Id
     private String url;
+
     @XmlAttribute(name = "length")
     @Column(columnDefinition = "TEXT")
     private String length;
