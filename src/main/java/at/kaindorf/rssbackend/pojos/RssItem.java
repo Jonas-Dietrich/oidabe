@@ -57,7 +57,7 @@ public class RssItem {
     @XmlJavaTypeAdapter(LocalDateConverter.class)
     private LocalDateTime pubDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     private RssCategory category;
 
     @Column(columnDefinition = "TEXT")

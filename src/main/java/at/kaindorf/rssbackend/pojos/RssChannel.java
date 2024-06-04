@@ -71,7 +71,7 @@ public class RssChannel {
     @XmlElement(name = "item")
     private List<RssItem> rssItems;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     private RssCategory category;
 
     @Column(columnDefinition = "TEXT")

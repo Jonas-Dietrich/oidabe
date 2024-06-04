@@ -1,5 +1,6 @@
 package at.kaindorf.rssbackend.db;
 
+import at.kaindorf.rssbackend.pojos.RssCategory;
 import at.kaindorf.rssbackend.pojos.RssChannel;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import at.kaindorf.rssbackend.pojos.RssOuter;
@@ -8,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Project: RSSBackend
@@ -23,6 +27,7 @@ import java.util.List;
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
     private final RssItemRepo rssItemRepo;
+    private final RssCategoryRepo rssCategoryRepo;
 
     /**
      * Loads data from the specified feed URL and persists it to the database.
@@ -40,6 +45,10 @@ public class RssUpdater {
         if (!rssChannelRepo.existsByFeedUrl(feedUrl) || channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) {
             List<RssItem> existingItems = rssItemRepo.findAll();
             channel.getRssItems().removeAll(existingItems);
+            Set<RssCategory> categorySet = new HashSet<>();
+            if (channel.getCategory() != null) categorySet.add(channel.getCategory());
+            categorySet.addAll(channel.getRssItems().stream().map(i -> i.getCategory()).filter(c -> c != null).collect(Collectors.toSet()));
+            rssCategoryRepo.saveAll(categorySet);
             rssChannelRepo.save(channel);
         }
     }
