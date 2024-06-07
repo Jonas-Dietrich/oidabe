@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Project: RSSBackend
@@ -32,23 +31,31 @@ import java.util.stream.Collectors;
 public class ItemResource {
     private final ItemListService itemListService;
 
+
     /**
-     * This method retrieves all RSS items from the item list.
+     * This method retrieves a specified number of RSS items from the item list.
      * If the 'urls' parameter is provided, it filters the items based on the given URLs.
+     * If 'numOfElements' is greater than the size of the list, it returns the entire list.
      *
      * @param urls The list of URLs to filter the items (optional)
+     * @param numOfElements The number of elements to retrieve (optional, default is 25)
      * @return A ResponseEntity containing the list of RSS items
      */
     @GetMapping
-    public ResponseEntity<Iterable<ApiItemList>> getRssItems(@RequestParam(required = false) List<String> urls) {
-        List<ApiItemList> rssItemList;
+    public ResponseEntity<Iterable<RssItem>> getRssItems(@RequestParam(required = false) List<String> urls, @RequestParam(required = false, defaultValue = "25") Integer numOfElements) {
+        List<RssItem> rssItemList;
 
         if (urls == null) {
-            rssItemList = itemListService.getFeedItems().stream().map(ApiItemList::new).collect(Collectors.toList());
+            rssItemList = itemListService.getFeedItems();
         } else {
-            rssItemList = itemListService.getFeedItems(urls).stream().map(ApiItemList::new).collect(Collectors.toList());
+            rssItemList = itemListService.getFeedItems(urls);
         }
-        return ResponseEntity.ok(rssItemList);
+
+        if (numOfElements > rssItemList.size()) {
+            numOfElements = rssItemList.size();
+        }
+
+        return ResponseEntity.ok(rssItemList.subList(0, numOfElements));
     }
 
     /**

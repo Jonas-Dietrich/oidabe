@@ -5,8 +5,10 @@ import at.kaindorf.rssbackend.pojos.RssOuter;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -22,6 +24,18 @@ import java.util.List;
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
 
+    @Value("${API_UPDATE_FREQUENCY}")
+    private Integer API_UPDATE_FREQUENCY;
+
+    public RssChannel getChannel(String feedUrl) {
+        RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
+        RssChannel channel = rss.getChannel();
+        rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
+        channel.setFeedUrl(feedUrl);
+        channel.setLastUpdate(LocalDateTime.now());
+        return channel;
+    }
+
     /**
      * Loads data from the specified feed URL and persists it to the database.
      * This method sets the channel for each RSS item in the channel,
@@ -31,11 +45,14 @@ public class RssUpdater {
      * @throws RuntimeException if an error occurs during data loading or persistence
      */
     public void loadData(String feedUrl) throws RuntimeException {
-        RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
-        RssChannel channel = rss.getChannel();
-        rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
-        channel.setFeedUrl(feedUrl);
-        if (!rssChannelRepo.existsByFeedUrl(feedUrl) || channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssChannelRepo.save(rss.getChannel());
+        if (!rssChannelRepo.existsByFeedUrl(feedUrl)) {
+            RssChannel channel = getChannel(feedUrl);
+            rssChannelRepo.save(channel);
+        }
+        else if (rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastUpdate().plusSeconds(API_UPDATE_FREQUENCY).isBefore(LocalDateTime.now()) ){
+            RssChannel channel = getChannel(feedUrl);
+            if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssChannelRepo.save(channel);
+        }
     }
 
     /**

@@ -49,6 +49,8 @@ public class RssChannel {
         this.rssImage = rssImage;
     }
 
+    private LocalDateTime lastUpdate = LocalDateTime.now();
+
     @EqualsAndHashCode.Include
     @Id
     private String feedUrl;
