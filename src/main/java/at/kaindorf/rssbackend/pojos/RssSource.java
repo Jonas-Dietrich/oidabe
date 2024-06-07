@@ -2,6 +2,7 @@ package at.kaindorf.rssbackend.pojos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.xml.bind.annotation.*;
 import lombok.AllArgsConstructor;
@@ -23,12 +24,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssSource {
+    @Id
+    @GeneratedValue
+    @EqualsAndHashCode.Exclude
+    @XmlTransient
+    private Long sourceId;
+
     @XmlValue
     @EqualsAndHashCode.Include
     @Column(columnDefinition = "TEXT")
-    @Id
     private String sourceName;
 
     @XmlAttribute

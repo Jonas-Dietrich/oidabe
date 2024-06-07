@@ -1,7 +1,6 @@
 package at.kaindorf.rssbackend.db;
 
-import at.kaindorf.rssbackend.pojos.RssChannel;
-import at.kaindorf.rssbackend.pojos.RssOuter;
+import at.kaindorf.rssbackend.pojos.*;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Project: RSSBackend
@@ -24,7 +27,6 @@ import java.util.List;
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
     private final RssItemRepo rssItemRepo;
-    private final RssCategoryRepo rssCategoryRepo;
 
     @Value("${API_UPDATE_FREQUENCY}")
     private Integer API_UPDATE_FREQUENCY;
@@ -35,6 +37,31 @@ public class RssUpdater {
         rss.getChannel().getRssItems().forEach(s -> s.setRssChannel(channel));
         channel.setFeedUrl(feedUrl);
         channel.setLastUpdate(LocalDateTime.now());
+
+        List<RssItem> existingItems = rssItemRepo.findAll();
+        channel.getRssItems().removeAll(existingItems);
+
+        Set<RssItem> rssItemSet = channel.getRssItems().stream().filter(Objects::nonNull).collect(Collectors.toSet());
+
+        // enclosure url
+        Set<RssEnclosureURL> rssEnclosureURLSet = rssItemSet.stream().map(i -> i.getEnclosureURL()).filter(Objects::nonNull).collect(Collectors.toSet());
+
+        // category
+        Set<RssCategory> categorySet = new HashSet<>();
+        if (channel.getCategory() != null) categorySet.add(channel.getCategory());
+        categorySet.addAll(channel.getRssItems().stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
+
+        // source
+        Set<RssSource> rssSourceSet = rssItemSet.stream().map(i -> i.getSource()).filter(Objects::nonNull).collect(Collectors.toSet());
+
+        for (RssItem item : rssItemSet) {
+            item.setCategory(categorySet.stream().filter(c -> c.equals(item.getCategory())).findAny().orElse(null));
+            item.setEnclosureURL(rssEnclosureURLSet.stream().filter(e -> e.equals(item.getEnclosureURL())).findAny().orElse(null));
+            item.setSource(rssSourceSet.stream().filter(s -> s.equals(item.getSource())).findAny().orElse(null));
+        }
+
+        channel.setCategory(categorySet.stream().filter(c -> c.equals(channel.getCategory())).findAny().orElse(null));
+
         return channel;
     }
 

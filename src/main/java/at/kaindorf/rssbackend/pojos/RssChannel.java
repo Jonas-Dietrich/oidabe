@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.pojos;
 
 import at.kaindorf.rssbackend.util.LocalDateConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -71,6 +72,7 @@ public class RssChannel {
 
     @OneToMany(mappedBy = "rssChannel", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @XmlElement(name = "item")
+    @JsonIgnore
     private List<RssItem> rssItems;
 
     @ManyToOne

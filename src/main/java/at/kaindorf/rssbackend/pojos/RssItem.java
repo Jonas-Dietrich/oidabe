@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.*;
 
@@ -26,15 +27,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD) // so löst man das problem
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssItem {
     @Id
     @GeneratedValue
     @JsonAlias("item_id")
+    @EqualsAndHashCode.Exclude
+    @XmlTransient
     private Long itemId;
 
     @Column(columnDefinition = "TEXT")
-    @EqualsAndHashCode.Include
     private String link;
 
     @Column(columnDefinition = "TEXT")
@@ -46,7 +47,6 @@ public class RssItem {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @XmlElement(name = "channel")
     @ToString.Exclude
-    @JsonIgnore
     @EqualsAndHashCode.Include
     private RssChannel rssChannel;
 
@@ -57,7 +57,7 @@ public class RssItem {
     @XmlJavaTypeAdapter(LocalDateConverter.class)
     private LocalDateTime pubDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssCategory category;
 
     @Column(columnDefinition = "TEXT")
