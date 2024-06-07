@@ -52,4 +52,8 @@ public class UserCommentService {
         log.info(userCommentInitializer.getUserCommentChannel().getFeedUrl());
         return rssItemRepo.getItemsFromChannelAfterDate(evaluateUpTo, userCommentInitializer.getUserCommentChannel().getFeedUrl());
     }
+
+    public Long countComments() {
+        return rssItemRepo.countRssItemsByRssChannels(List.of(userCommentInitializer.getUserCommentChannel().getFeedUrl()));
+    }
 }

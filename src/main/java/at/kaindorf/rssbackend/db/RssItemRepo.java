@@ -42,4 +42,13 @@ public interface RssItemRepo extends JpaRepository<RssItem, Long> {
      */
     @Query("select item from RssItem item where item.rssChannel.feedUrl in :feedUrls")
     Page<RssItem> getRssItemByUrls(List<String> feedUrls, Pageable pageable);
+
+    /**
+     * Counts the number of RssItems that belong to the channels with the provided feed URLs.
+     *
+     * @param feedUrls The list of feed URLs to count RssItems from.
+     * @return The number of RssItems that belong to the channels with the provided feed URLs.
+     */
+    @Query("select count(*) from RssItem item where item.rssChannel.feedUrl in :feedUrls")
+    Long countRssItemsByRssChannels(List<String> feedUrls);
 }
