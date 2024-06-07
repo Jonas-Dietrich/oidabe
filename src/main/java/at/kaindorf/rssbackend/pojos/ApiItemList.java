@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ApiItemList {
-    private Long item_id;
+    private Long itemId;
 
     private String title;
     private String link;
@@ -27,6 +27,7 @@ public class ApiItemList {
      * @param rssItem The RssItem object from which to initialize the ApiItemList object.
      */
     public ApiItemList(RssItem rssItem) {
+        itemId = rssItem.getItemId();
         title = rssItem.getTitle();
         link = rssItem.getLink();
         description = rssItem.getDescription();
