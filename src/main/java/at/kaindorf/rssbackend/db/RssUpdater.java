@@ -23,6 +23,8 @@ import java.util.List;
 @Slf4j
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
+    private final RssItemRepo rssItemRepo;
+    private final RssCategoryRepo rssCategoryRepo;
 
     @Value("${API_UPDATE_FREQUENCY}")
     private Integer API_UPDATE_FREQUENCY;

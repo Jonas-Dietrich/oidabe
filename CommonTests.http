@@ -29,3 +29,8 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8080/item-list/pages?pageSize=10&pageNo=0&urls=https://www.diepresse.com/rss/Politik&asc=false
+
+
+###
+
+GET http://localhost:8080/feed-list?urls=https%3A%2F%2Fwww.gruene-bundestag.de%2Fthemen%2Fnews%2F5885.xml%2Chttps%3A%2F%2Fwww.dfb.de%2Fnews%2Frss%2Ffeed%2F%3Ftx_news_pi1%5BoverwriteDemand%5D%5Bcategories%5D%3D10087

@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.pojos;
 
 import at.kaindorf.rssbackend.util.LocalDateConverter;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -27,11 +28,10 @@ import java.time.LocalDateTime;
 @XmlAccessorType(XmlAccessType.FIELD) // so löst man das problem
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssItem {
-
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Exclude
-    private Long item_id;
+    @JsonAlias("item_id")
+    private Long itemId;
 
     @Column(columnDefinition = "TEXT")
     @EqualsAndHashCode.Include
@@ -47,16 +47,17 @@ public class RssItem {
     @XmlElement(name = "channel")
     @ToString.Exclude
     @JsonIgnore
+    @EqualsAndHashCode.Include
     private RssChannel rssChannel;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @XmlElement(name = "enclosure")
     private RssEnclosureURL enclosureURL;
 
     @XmlJavaTypeAdapter(LocalDateConverter.class)
     private LocalDateTime pubDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     private RssCategory category;
 
     @Column(columnDefinition = "TEXT")
@@ -68,9 +69,4 @@ public class RssItem {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private RssSource source;
-
-
-    public String toString() {
-        return String.format("%d: %s, %s", item_id, title, link);
-    }
 }

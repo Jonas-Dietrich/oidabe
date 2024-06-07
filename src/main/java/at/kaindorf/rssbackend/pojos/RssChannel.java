@@ -65,7 +65,7 @@ public class RssChannel {
     @XmlJavaTypeAdapter(LocalDateConverter.class)
     private LocalDateTime lastBuildDate;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @XmlElement(name = "image")
     private RssImage rssImage;
 
@@ -73,7 +73,7 @@ public class RssChannel {
     @XmlElement(name = "item")
     private List<RssItem> rssItems;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     private RssCategory category;
 
     @Column(columnDefinition = "TEXT")
