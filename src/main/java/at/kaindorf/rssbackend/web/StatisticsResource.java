@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.web;
 
 import at.kaindorf.rssbackend.db.*;
+import at.kaindorf.rssbackend.pojos.ApiAboutStats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +63,19 @@ public class StatisticsResource {
     @GetMapping("/count/enclosure-urls")
     public ResponseEntity<Long> countEnclosureUrls() {
         return ResponseEntity.ok(rssEnclosureURLRepo.count());
+    }
+
+    @GetMapping("/count/aboutPage")
+    public ResponseEntity<ApiAboutStats> getApiAboutStats() {
+        Long channelCount = rssChannelRepo.count();
+        Long itemCount = rssItemRepo.count();
+        Long commentCount = userCommentService.countComments();
+        Long categoryCount = rssCategoryRepo.count();
+        Long sourceCount = rssSourceRepo.count();
+        Long enclosureUrlCount = rssEnclosureURLRepo.count();
+
+        ApiAboutStats stats = new ApiAboutStats(channelCount, commentCount, itemCount, categoryCount, sourceCount, enclosureUrlCount);
+
+        return ResponseEntity.ok(stats);
     }
 }
