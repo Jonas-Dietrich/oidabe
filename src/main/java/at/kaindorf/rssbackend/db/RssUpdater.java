@@ -44,7 +44,7 @@ public class RssUpdater {
         Set<RssItem> rssItemSet = channel.getRssItems().stream().filter(Objects::nonNull).collect(Collectors.toSet());
 
         // enclosure url
-        Set<RssEnclosureURL> rssEnclosureURLSet = rssItemSet.stream().map(i -> i.getEnclosureURL()).filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<RssEnclosureURL> rssEnclosureURLSet = rssItemSet.stream().map(RssItem::getEnclosureURL).filter(Objects::nonNull).collect(Collectors.toSet());
 
         // category
         Set<RssCategory> categorySet = new HashSet<>();
@@ -52,7 +52,7 @@ public class RssUpdater {
         categorySet.addAll(channel.getRssItems().stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
 
         // source
-        Set<RssSource> rssSourceSet = rssItemSet.stream().map(i -> i.getSource()).filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<RssSource> rssSourceSet = rssItemSet.stream().map(RssItem::getSource).filter(Objects::nonNull).collect(Collectors.toSet());
 
         for (RssItem item : rssItemSet) {
             item.setCategory(categorySet.stream().filter(c -> c.equals(item.getCategory())).findAny().orElse(null));

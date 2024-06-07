@@ -2,7 +2,6 @@ package at.kaindorf.rssbackend.pojos;
 
 import at.kaindorf.rssbackend.util.LocalDateConverter;
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
