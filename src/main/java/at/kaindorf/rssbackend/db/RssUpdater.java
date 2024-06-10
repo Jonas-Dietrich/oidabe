@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
     private final RssItemRepo rssItemRepo;
+    private final RssCategoryRepo rssCategoryRepo;
 
     @Value("${API_UPDATE_FREQUENCY}")
     private Integer API_UPDATE_FREQUENCY;
@@ -48,6 +49,7 @@ public class RssUpdater {
 
         // category
         Set<RssCategory> categorySet = new HashSet<>();
+        categorySet.addAll(rssCategoryRepo.findAll());
         if (channel.getCategory() != null) categorySet.add(channel.getCategory());
         categorySet.addAll(channel.getRssItems().stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
 
