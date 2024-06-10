@@ -59,6 +59,7 @@ public class RssUpdater {
             item.setCategory(categorySet.stream().filter(c -> c.equals(item.getCategory())).findAny().orElse(null));
             item.setEnclosureURL(rssEnclosureURLSet.stream().filter(e -> e.equals(item.getEnclosureURL())).findAny().orElse(null));
             item.setSource(rssSourceSet.stream().filter(s -> s.equals(item.getSource())).findAny().orElse(null));
+            if (item.getPubDate() == null) item.setPubDate(LocalDateTime.now());
         }
 
         channel.setCategory(categorySet.stream().filter(c -> c.equals(channel.getCategory())).findAny().orElse(null));
