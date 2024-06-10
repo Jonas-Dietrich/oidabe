@@ -48,8 +48,7 @@ public class RssUpdater {
         Set<RssEnclosureURL> rssEnclosureURLSet = rssItemSet.stream().map(RssItem::getEnclosureURL).filter(Objects::nonNull).collect(Collectors.toSet());
 
         // category
-        Set<RssCategory> categorySet = new HashSet<>();
-        categorySet.addAll(rssCategoryRepo.findAll());
+        Set<RssCategory> categorySet = new HashSet<>(rssCategoryRepo.findAll());
         if (channel.getCategory() != null) categorySet.add(channel.getCategory());
         categorySet.addAll(channel.getRssItems().stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
 
