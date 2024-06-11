@@ -78,10 +78,12 @@ public class RssUpdater {
     public void loadData(String feedUrl) throws RuntimeException {
         if (!rssChannelRepo.existsByFeedUrl(feedUrl)) {
             RssChannel channel = getChannel(feedUrl);
+            log.info("adding " + feedUrl);
             rssChannelRepo.save(channel);
         }
         else if (rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastUpdate().plusSeconds(API_UPDATE_FREQUENCY).isBefore(LocalDateTime.now()) ){
             RssChannel channel = getChannel(feedUrl);
+            log.info("updating " + feedUrl);
             if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssChannelRepo.save(channel);
         }
     }
@@ -95,7 +97,12 @@ public class RssUpdater {
      */
     public void updateAllFeeds(List<String> urls) throws RuntimeException {
         for (String url : urls) {
-            updateFeed(url);
+            try {
+                updateFeed(url);
+            }
+            catch (Exception e) {
+                log.error("Error loading: " + url);
+            }
         }
     }
 
