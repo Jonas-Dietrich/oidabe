@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssCategory {
     @Id
     @GeneratedValue
@@ -33,9 +34,11 @@ public class RssCategory {
 
     @XmlValue
     @Column(columnDefinition = "TEXT")
+    @EqualsAndHashCode.Include
     private String categoryName;
 
     @XmlAttribute
     @Column(columnDefinition = "TEXT")
+    @EqualsAndHashCode.Include
     private String domain;
 }

@@ -75,3 +75,7 @@ GET http://localhost:8080/comments/pages?pageSize=3&pageNo=5
 ###
 
 GET http://localhost:8080/item-list?urls=https://www.autobild.de/rss/22590657.xml
+
+###
+
+GET http://localhost:8080/item-list?urls=https://www.wie-schreibe-ich-eine-bewerbung.info/feed/
