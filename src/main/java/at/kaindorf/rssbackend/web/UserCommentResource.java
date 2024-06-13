@@ -5,11 +5,16 @@ import at.kaindorf.rssbackend.pojos.ApiItemList;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -50,5 +55,18 @@ public class UserCommentResource {
     @PostMapping
     public ResponseEntity<RssItem> postUserComment(@RequestBody RssItem comment) {
         return ResponseEntity.ok(userCommentService.postComment(comment));
+    }
+
+    @GetMapping("/pages")
+    public ResponseEntity<Iterable<RssItem>> getRssCommentsPage(
+            @RequestParam(required = false, defaultValue = "0") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "itemId") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") Boolean asc) {
+
+        Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(direction, sortBy));
+
+        return ResponseEntity.ok(userCommentService.getCommentsPage(paging));
     }
 }

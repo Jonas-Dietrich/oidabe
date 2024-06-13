@@ -4,9 +4,12 @@ import at.kaindorf.rssbackend.pojos.RssChannel;
 import at.kaindorf.rssbackend.pojos.RssItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,5 +58,11 @@ public class UserCommentService {
 
     public Long countComments() {
         return rssItemRepo.countRssItemsByRssChannels(List.of(userCommentInitializer.getUserCommentChannel().getFeedUrl()));
+    }
+
+
+    public Page<RssItem> getCommentsPage(Pageable paging) throws RuntimeException {
+        List<String> urls = List.of(userCommentInitializer.getUserCommentChannel().getFeedUrl());
+        return rssItemRepo.getRssItemByUrls(urls, paging);
     }
 }
