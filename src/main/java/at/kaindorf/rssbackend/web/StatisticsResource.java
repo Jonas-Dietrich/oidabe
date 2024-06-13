@@ -30,41 +30,73 @@ public class StatisticsResource {
     private final RssSourceRepo rssSourceRepo;
     private final RssEnclosureURLRepo rssEnclosureURLRepo;
 
+    /**
+     * Endpoint to get the count of channels.
+     * @return ResponseEntity containing the count of channels.
+     */
     @GetMapping("/count/channel")
     public ResponseEntity<Long> countChannels() {
         return ResponseEntity.ok(rssChannelRepo.count());
     }
 
+    /**
+     * Endpoint to get the count of items.
+     * @return ResponseEntity containing the count of items.
+     */
     @GetMapping("/count/items")
     public ResponseEntity<Long> countItems() {
         return ResponseEntity.ok(rssItemRepo.count());
     }
 
+    /**
+     * Endpoint to get the count of comments.
+     * @return ResponseEntity containing the count of comments.
+     */
     @GetMapping("/count/comments")
     public ResponseEntity<Long> countComments() {
         return ResponseEntity.ok(userCommentService.countComments());
     }
 
+    /**
+     * Endpoint to get the count of images.
+     * @return ResponseEntity containing the count of images.
+     */
     @GetMapping("/count/images")
     public ResponseEntity<Long> countImages() {
         return ResponseEntity.ok(rssImageRepo.count());
     }
 
+    /**
+     * Endpoint to get the count of categories.
+     * @return ResponseEntity containing the count of categories.
+     */
     @GetMapping("/count/categories")
     public ResponseEntity<Long> countCategories() {
         return ResponseEntity.ok(rssCategoryRepo.count());
     }
 
+    /**
+     * Endpoint to get the count of sources.
+     * @return ResponseEntity containing the count of sources.
+     */
     @GetMapping("/count/sources")
     public ResponseEntity<Long> countSources() {
         return ResponseEntity.ok(rssSourceRepo.count());
     }
 
+    /**
+     * Endpoint to get the count of enclosure URLs.
+     * @return ResponseEntity containing the count of enclosure URLs.
+     */
     @GetMapping("/count/enclosure-urls")
     public ResponseEntity<Long> countEnclosureUrls() {
         return ResponseEntity.ok(rssEnclosureURLRepo.count());
     }
 
+    /**
+     * Endpoint to get the statistics for the about page.
+     * @return ResponseEntity containing the statistics for the about page.
+     */
     @GetMapping("/count/aboutPage")
     public ResponseEntity<ApiAboutStats> getApiAboutStats() {
         Long channelCount = rssChannelRepo.count();

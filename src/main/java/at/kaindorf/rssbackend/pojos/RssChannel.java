@@ -40,6 +40,7 @@ public class RssChannel {
      * @param description The description of the RSS channel.
      * @param lastBuildDate The last build date of the RSS channel.
      * @param rssItems The list of items in the RSS channel.
+     * @param rssImage The image of the Rss channel
      */
     public RssChannel(String feedUrl, String title, String description, LocalDateTime lastBuildDate, List<RssItem> rssItems, RssImage rssImage) {
         this.feedUrl = feedUrl;

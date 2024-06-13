@@ -28,6 +28,7 @@ public interface RssItemRepo extends JpaRepository<RssItem, Long> {
      * Retrieves all Items that have been published after the provided date from a specific channel.
      *
      * @param evaluateUpTo The date to evaluate the items against.
+     * @param feedUrl The feed that should be evaluated.
      * @return A list of RssItems that have been published after the provided date.
      */
     @Query("select item from RssItem item where item.pubDate >= :evaluateUpTo and item.rssChannel.feedUrl = :feedUrl order by item.pubDate desc")

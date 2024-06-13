@@ -29,9 +29,26 @@ public class RssUpdater {
     private final RssItemRepo rssItemRepo;
     private final RssCategoryRepo rssCategoryRepo;
 
+    /**
+     * The frequency at which the API updates, in seconds.
+     * This value is injected from the application properties.
+     */
     @Value("${API_UPDATE_FREQUENCY}")
     private Integer API_UPDATE_FREQUENCY;
 
+    /**
+     * This method is used to retrieve an RssChannel object from a given feed URL.
+     * It unmarshals the XML data from the feed URL into an RssOuter object, and retrieves the RssChannel from it.
+     * The method then sets the feed URL and the last update time for the channel.
+     * It also removes any existing items from the channel's item list, and collects the remaining items into a set.
+     * The method then collects the enclosure URLs, categories, and sources from the items into separate sets.
+     * For each item in the item set, it sets the category, enclosure URL, and source to the corresponding object from the respective sets.
+     * If the item's publication date is null, it sets the publication date to the current date and time.
+     * Finally, it sets the channel's category to the corresponding object from the category set.
+     *
+     * @param feedUrl The URL of the feed from which to retrieve the RssChannel.
+     * @return The RssChannel object retrieved from the feed URL.
+     */
     public RssChannel getChannel(String feedUrl) {
         RssOuter rss = JAXB.unmarshal(feedUrl, RssOuter.class);
         RssChannel channel = rss.getChannel();

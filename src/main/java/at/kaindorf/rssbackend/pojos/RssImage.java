@@ -34,6 +34,13 @@ public class RssImage {
     @XmlTransient
     private Long imageId;
 
+    /**
+     * This is a constructor for the RssImage class.
+     * It initializes a new RssImage object with the provided URL and title.
+     *
+     * @param url The URL of the image.
+     * @param title The title of the image.
+     */
     public RssImage(String url, String title) {
         this.url = url;
         this.title = title;

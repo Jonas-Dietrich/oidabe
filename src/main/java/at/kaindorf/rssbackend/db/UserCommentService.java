@@ -55,11 +55,23 @@ public class UserCommentService {
         return rssItemRepo.getItemsFromChannelAfterDate(evaluateUpTo, userCommentInitializer.getUserCommentChannel().getFeedUrl());
     }
 
+    /**
+     * This method is used to count the total number of user comments.
+     *
+     * @return The total number of user comments as a Long.
+     */
     public Long countComments() {
         return rssItemRepo.countRssItemsByRssChannels(List.of(userCommentInitializer.getUserCommentChannel().getFeedUrl()));
     }
 
-
+    /**
+     * This method is used to retrieve a paginated list of user comments.
+     * It accepts a Pageable object representing the pagination and sorting information.
+     *
+     * @param paging The Pageable object representing the pagination and sorting information.
+     * @return A Page of RssItem objects representing the user comments.
+     * @throws RuntimeException if an error occurs while retrieving the comments.
+     */
     public Page<RssItem> getCommentsPage(Pageable paging) throws RuntimeException {
         List<String> urls = List.of(userCommentInitializer.getUserCommentChannel().getFeedUrl());
         return rssItemRepo.getRssItemByUrls(urls, paging);
