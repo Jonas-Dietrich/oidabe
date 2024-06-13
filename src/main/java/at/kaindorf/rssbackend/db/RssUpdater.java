@@ -56,7 +56,7 @@ public class RssUpdater {
         channel.setFeedUrl(feedUrl);
         channel.setLastUpdate(LocalDateTime.now());
 
-        List<RssItem> existingItems = rssItemRepo.findAll();
+        List<RssItem> existingItems = rssItemRepo.getLatestRssItems(feedUrl);
         channel.getRssItems().removeAll(existingItems);
 
         Set<RssItem> rssItemSet = channel.getRssItems().stream().filter(Objects::nonNull).collect(Collectors.toSet());

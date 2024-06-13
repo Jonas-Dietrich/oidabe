@@ -35,6 +35,15 @@ public interface RssItemRepo extends JpaRepository<RssItem, Long> {
     List<RssItem> getItemsFromChannelAfterDate(LocalDateTime evaluateUpTo, String feedUrl);
 
     /**
+     * Retrieves the latest RssItems from a specific channel.
+     *
+     * @param feedUrl The feed URL of the channel to retrieve RssItems from.
+     * @return A list of the latest RssItems from the specified channel, ordered by publication date in descending order.
+     */
+    @Query("select item from RssItem item where item.rssChannel.feedUrl = :feedUrl order by item.pubDate desc")
+    List<RssItem> getLatestRssItems(String feedUrl);
+
+    /**
      * Retrieves a paginated list of RssItems based on the provided feed URLs.
      *
      * @param feedUrls The list of feed URLs to retrieve RssItems from.
