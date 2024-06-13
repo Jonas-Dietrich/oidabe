@@ -79,3 +79,7 @@ GET http://localhost:8080/item-list?urls=https://www.autobild.de/rss/22590657.xm
 ###
 
 GET http://localhost:8080/item-list?urls=https://www.wie-schreibe-ich-eine-bewerbung.info/feed/
+
+###
+
+GET http://localhost:8080/item-list?urls=https://www.kleinezeitung.at/rss/service/newsticker

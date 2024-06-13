@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +55,8 @@ public class RssUpdater {
 
         List<RssItem> existingItems = rssItemRepo.getLatestRssItems(feedUrl);
         channel.getRssItems().removeAll(existingItems);
+        Set<RssItem> uniqueRssItems = new HashSet<>(channel.getRssItems());
+        channel.setRssItems(new ArrayList<>(uniqueRssItems));
 
         Set<RssItem> rssItemSet = channel.getRssItems().stream().filter(Objects::nonNull).collect(Collectors.toSet());
 
