@@ -1,10 +1,14 @@
 package at.kaindorf.rssbackend.web;
 
 import at.kaindorf.rssbackend.db.FeedListService;
+import at.kaindorf.rssbackend.db.RssItemRepo;
 import at.kaindorf.rssbackend.pojos.ApiChannelListItem;
+import at.kaindorf.rssbackend.pojos.ChannelCount;
 import at.kaindorf.rssbackend.pojos.RssChannel;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChannelResource {
     private final FeedListService feedListService;
+    private final RssItemRepo rssItemRepo;
 
     /**
      * Retrieves all RSS channels from the feed list.
@@ -60,5 +65,10 @@ public class ChannelResource {
         RssChannel rssChannel = feedListService.getChannel(url);
         if (rssChannel == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(new ApiChannelListItem(rssChannel));
+    }
+
+    @GetMapping("/topChannels")
+    public ResponseEntity<Iterable<ChannelCount>> getTopTen(@RequestParam(required = false, defaultValue = "10") Integer numOfChannels) {
+        return ResponseEntity.ok(rssItemRepo.getTopChannels(PageRequest.of(0, numOfChannels)));
     }
 }
