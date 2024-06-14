@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD) // so löst man das problem
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RssItem {
     @Id
     @GeneratedValue
@@ -35,12 +36,14 @@ public class RssItem {
     private Long itemId;
 
     @Column(columnDefinition = "TEXT")
+    @EqualsAndHashCode.Include
     private String link;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(columnDefinition = "TEXT")
+    @EqualsAndHashCode.Include
     private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
