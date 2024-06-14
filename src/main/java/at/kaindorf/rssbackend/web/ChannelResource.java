@@ -5,7 +5,6 @@ import at.kaindorf.rssbackend.db.RssItemRepo;
 import at.kaindorf.rssbackend.pojos.ApiChannelListItem;
 import at.kaindorf.rssbackend.pojos.ChannelCount;
 import at.kaindorf.rssbackend.pojos.RssChannel;
-import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

@@ -3,8 +3,6 @@ package at.kaindorf.rssbackend.pojos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * Project: RssBackend
  * Created by: eibmac20
