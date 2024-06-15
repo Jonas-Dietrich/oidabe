@@ -1,6 +1,7 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.*;
+import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -29,13 +32,24 @@ public class RssUpdater {
 
     private final Map<String, Object> locks = new ConcurrentHashMap<>();
 
+    /**
+     * The size of the thread pool used for updating RSS feeds.
+     * This value is injected from the application properties.
+     * The thread pool size determines the maximum number of concurrent tasks that can be executed when updating feeds.
+     * If more tasks are submitted than the size of the thread pool, they will be queued and executed as threads become available.
+     */
+    @Value("${THREAD_POOL_SIZE:10}")
+    private Integer FEED_THREAD_POOL_SIZE;
 
     /**
      * The frequency at which the API updates, in seconds.
      * This value is injected from the application properties.
      */
-    @Value("${API_UPDATE_FREQUENCY}")
+    @Value("${API_UPDATE_FREQUENCY:300}")
     private Integer API_UPDATE_FREQUENCY;
+
+
+
 
     /**
      * This method is used to retrieve an RssChannel object from a given feed URL.
@@ -126,12 +140,17 @@ public class RssUpdater {
      * @throws RuntimeException if an error occurs during data loading or persistence
      */
     public void updateAllFeeds(List<String> urls) throws RuntimeException {
+        urls = new ArrayList<>(new HashSet<>(urls));
+        ExecutorService executorService = Executors.newFixedThreadPool(FEED_THREAD_POOL_SIZE);
+
         for (String url : urls) {
-            try {
-                updateFeed(url);
-            } catch (Exception e) {
-                log.error("Error loading: " + url);
-            }
+            executorService.submit(() -> {
+                try {
+                    updateFeed(url);
+                } catch (Exception e) {
+                    log.error("Error loading: " + url);
+                }
+            });
         }
     }
 
