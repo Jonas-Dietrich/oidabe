@@ -4,12 +4,7 @@ To run this backend locally, clone it to your pc and open it with Intellij or an
 The fastest way would be to import these environment variables to your Intellij run configuration and change the database credentials if needed and create the `rss_pos` db.
 
 ```env
-API_COMMENT_URL=http://localhost:8080
-API_UPDATE_FREQUENCY=30
-DATABASE_DDL_AUTO=none
-DATABASE_PASSWORD=postgres
-DATABASE_URL=jdbc:postgresql://localhost:5432/rss_pos
-DATABASE_USERNAME=postgres
+API_COMMENT_URL=http://localhost:8080;API_UPDATE_FREQUENCY=30;DATABASE_DDL_AUTO=create;DATABASE_PASSWORD=postgres;DATABASE_URL=jdbc:postgresql://localhost:5432/pos_rss;DATABASE_USERNAME=postgres
 ```
 
 Alternatively, you can configure all of this yourself:
