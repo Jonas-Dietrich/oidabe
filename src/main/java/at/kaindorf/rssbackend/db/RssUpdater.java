@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -109,27 +110,31 @@ public class RssUpdater {
      * @throws RuntimeException if an error occurs during data loading or persistence
      */
     public void loadData(String feedUrl) throws RuntimeException {
-        if (locks.containsKey(feedUrl)) {
-            return;
-        }
-
         Object lock = locks.computeIfAbsent(feedUrl, k -> new Object());
 
-        synchronized (lock) {
-            if (!rssChannelRepo.existsByFeedUrl(feedUrl)) {
-                RssChannel channel = getChannel(feedUrl);
-                log.info(feedUrl + " adding");
-                rssChannelRepo.save(channel);
-                log.info(feedUrl + " initialized with " + channel.getRssItems().size() + " items");
-            } else if (rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastUpdate().plusSeconds(API_UPDATE_FREQUENCY).isBefore(LocalDateTime.now())) {
-                RssChannel channel = getChannel(feedUrl);
-                log.info(feedUrl + " updating");
-                if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate()))
+        try {
+            synchronized (lock) {
+                if (!rssChannelRepo.existsByFeedUrl(feedUrl)) {
+                    RssChannel channel = getChannel(feedUrl);
+                    log.info(feedUrl + " adding");
                     rssChannelRepo.save(channel);
-                log.info(feedUrl + " added " + channel.getRssItems().size() + " new items");
+                    log.info(feedUrl + " initialized with " + channel.getRssItems().size() + " items");
+                } else if (rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastUpdate().plusSeconds(API_UPDATE_FREQUENCY).isBefore(LocalDateTime.now())) {
+                    RssChannel channel = getChannel(feedUrl);
+                    log.info(feedUrl + " updating");
+                    if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate()))
+                        rssChannelRepo.save(channel);
+                    log.info(feedUrl + " added " + channel.getRssItems().size() + " new items");
+                }
+                else {
+                    log.info("skipping " + feedUrl);
+                }
             }
+        } finally {
+            locks.remove(feedUrl);
         }
     }
+
 
     /**
      * Updates all the feeds from the provided list of URLs.
@@ -141,18 +146,28 @@ public class RssUpdater {
     public void updateAllFeeds(List<String> urls) throws RuntimeException {
         urls = new ArrayList<>(new HashSet<>(urls));
 
-        try (ExecutorService executorService = Executors.newFixedThreadPool(FEED_THREAD_POOL_SIZE)) {
+        ExecutorService executorService = Executors.newFixedThreadPool(FEED_THREAD_POOL_SIZE);
+        try {
             for (String url : urls) {
                 executorService.submit(() -> {
                     try {
+                        log.info("calling " + url);
                         updateFeed(url);
                     } catch (Exception e) {
                         log.error("Error loading: " + url);
                     }
                 });
             }
-        } catch (Exception e) {
-            log.error("Error in executor service ", e);
+        } finally {
+            executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)) {
+                    throw new RuntimeException("Not all tasks completed");
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Thread was interrupted", e);
+            }
         }
     }
 
