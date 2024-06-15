@@ -1,7 +1,6 @@
 package at.kaindorf.rssbackend.db;
 
 import at.kaindorf.rssbackend.pojos.*;
-import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXB;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -141,16 +140,19 @@ public class RssUpdater {
      */
     public void updateAllFeeds(List<String> urls) throws RuntimeException {
         urls = new ArrayList<>(new HashSet<>(urls));
-        ExecutorService executorService = Executors.newFixedThreadPool(FEED_THREAD_POOL_SIZE);
 
-        for (String url : urls) {
-            executorService.submit(() -> {
-                try {
-                    updateFeed(url);
-                } catch (Exception e) {
-                    log.error("Error loading: " + url);
-                }
-            });
+        try (ExecutorService executorService = Executors.newFixedThreadPool(FEED_THREAD_POOL_SIZE)) {
+            for (String url : urls) {
+                executorService.submit(() -> {
+                    try {
+                        updateFeed(url);
+                    } catch (Exception e) {
+                        log.error("Error loading: " + url);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            log.error("Error in executor service ", e);
         }
     }
 
