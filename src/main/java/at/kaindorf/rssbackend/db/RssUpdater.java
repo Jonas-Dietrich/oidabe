@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -25,6 +26,9 @@ public class RssUpdater {
     private final RssChannelRepo rssChannelRepo;
     private final RssItemRepo rssItemRepo;
     private final RssCategoryRepo rssCategoryRepo;
+
+    private final Map<String, Object> locks = new ConcurrentHashMap<>();
+
 
     /**
      * The frequency at which the API updates, in seconds.
@@ -55,8 +59,6 @@ public class RssUpdater {
 
         List<RssItem> existingItems = rssItemRepo.getLatestRssItems(feedUrl);
         channel.getRssItems().removeAll(existingItems);
-        Set<RssItem> uniqueRssItems = new HashSet<>(channel.getRssItems());
-        channel.setRssItems(new ArrayList<>(uniqueRssItems));
 
         Set<RssItem> rssItemSet = channel.getRssItems().stream().filter(Objects::nonNull).collect(Collectors.toSet());
 
@@ -66,7 +68,7 @@ public class RssUpdater {
         // category
         Set<RssCategory> categorySet = new HashSet<>(rssCategoryRepo.findAll());
         if (channel.getCategory() != null) categorySet.add(channel.getCategory());
-        categorySet.addAll(channel.getRssItems().stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
+        categorySet.addAll(rssItemSet.stream().map(RssItem::getCategory).filter(Objects::nonNull).collect(Collectors.toSet()));
 
         // source
         Set<RssSource> rssSourceSet = rssItemSet.stream().map(RssItem::getSource).filter(Objects::nonNull).collect(Collectors.toSet());
@@ -77,6 +79,8 @@ public class RssUpdater {
             item.setSource(rssSourceSet.stream().filter(s -> s.equals(item.getSource())).findAny().orElse(null));
             if (item.getPubDate() == null) item.setPubDate(LocalDateTime.now());
         }
+
+        channel.setRssItems(new ArrayList<>(rssItemSet));
 
         channel.setCategory(categorySet.stream().filter(c -> c.equals(channel.getCategory())).findAny().orElse(null));
 
@@ -92,15 +96,25 @@ public class RssUpdater {
      * @throws RuntimeException if an error occurs during data loading or persistence
      */
     public void loadData(String feedUrl) throws RuntimeException {
-        if (!rssChannelRepo.existsByFeedUrl(feedUrl)) {
-            RssChannel channel = getChannel(feedUrl);
-            log.info("adding " + feedUrl);
-            rssChannelRepo.save(channel);
+        if (locks.containsKey(feedUrl)) {
+            return;
         }
-        else if (rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastUpdate().plusSeconds(API_UPDATE_FREQUENCY).isBefore(LocalDateTime.now()) ){
-            RssChannel channel = getChannel(feedUrl);
-            log.info("updating " + feedUrl);
-            if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate())) rssChannelRepo.save(channel);
+
+        Object lock = locks.computeIfAbsent(feedUrl, k -> new Object());
+
+        synchronized (lock) {
+            if (!rssChannelRepo.existsByFeedUrl(feedUrl)) {
+                RssChannel channel = getChannel(feedUrl);
+                log.info(feedUrl + " adding");
+                rssChannelRepo.save(channel);
+                log.info(feedUrl + " initialized with " + channel.getRssItems().size() + " items");
+            } else if (rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastUpdate().plusSeconds(API_UPDATE_FREQUENCY).isBefore(LocalDateTime.now())) {
+                RssChannel channel = getChannel(feedUrl);
+                log.info(feedUrl + " updating");
+                if (channel.getLastBuildDate() == null || !rssChannelRepo.findRssChannelByFeedUrl(feedUrl).getLastBuildDate().equals(channel.getLastBuildDate()))
+                    rssChannelRepo.save(channel);
+                log.info(feedUrl + " added " + channel.getRssItems().size() + " new items");
+            }
         }
     }
 
@@ -115,8 +129,7 @@ public class RssUpdater {
         for (String url : urls) {
             try {
                 updateFeed(url);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("Error loading: " + url);
             }
         }

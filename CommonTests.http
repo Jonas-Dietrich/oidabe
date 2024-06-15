@@ -87,3 +87,7 @@ GET http://localhost:8080/item-list?urls=https://www.kleinezeitung.at/rss/servic
 ###
 
 GET http://localhost:8080/feed-list/topChannels?numOfChannels=2
+
+###
+
+GET http://localhost:8080/item-list?urls=https://www.autobild.de/rss/22590657.xml
