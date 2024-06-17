@@ -1,7 +1,7 @@
 # Run it locally
 To run this backend locally, clone it to your pc and open it with Intellij or any other IDE.
 
-The fastest way would be to import the environment variables to your Intellij run configuration and change the database credentials if needed and create the `rss_pos` db.
+The fastest way would be to import the environment variables to your Intellij run configuration and change the database credentials if needed and create the `pos_rss` db.
 
 - Open the project in Intellij and run the [RssBackendApplication](/src/main/java/at/kaindorf/rssbackend/RssBackendApplication.java). The application will crash.
 - Now, edit the run configurations ![](.screenshots/editConf.png)
